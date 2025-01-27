@@ -2,22 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: 'Montserrat1';
+  src: url('./tools/styles/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
 }
 
+:root {
+  --background:  #faf0e0;
+  --foreground: #171717;
+  --font-family: Montserrat1;
+  color: #334155;
+}
+
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat1';
 }
 
 @layer utilities {
@@ -25,3 +33,4 @@ body {
     text-wrap: balance;
   }
 }
+
