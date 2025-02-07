@@ -20,7 +20,7 @@ export default function FeaturedSlideShow({ sections }: Props) {
         }, 8000);
 
         return () => clearInterval(interval);
-    }, [featuredIndex, sections.length]); // Dependency array updated
+    }, [sections.length]); // Dependency array updated
 
     if (sections.length === 0) {
         return <div className="text-center">No featured items available</div>;
@@ -30,7 +30,7 @@ export default function FeaturedSlideShow({ sections }: Props) {
 
     return (
         <div className="w-full ">
-            <div className="flex flex-col justify-center items-center w-full aspect-w-16 aspect-h-9 overflow-hidden rounded-lg md:flex-row min-h-[500px]">
+            <div className="flex flex-col justify-center items-center w-full aspect-w-16 aspect-h-9 overflow-hidden rounded-lg md:flex-row min-h-[400px]">
                 {/* Image */}
                 <div className="md:max-w-[60%]">
                     <AnimatePresence mode="wait" >
@@ -38,7 +38,7 @@ export default function FeaturedSlideShow({ sections }: Props) {
                             key={featured.image}
                             src={featured.image}
                             alt={featured.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover rounded-lg"
                             initial={{ opacity: 0, x: 50 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -50 }}
@@ -47,7 +47,7 @@ export default function FeaturedSlideShow({ sections }: Props) {
                     </AnimatePresence>
                 </div>
 
-                <motion.div className="left-4 p-3  md:w-[40%]"
+                <motion.div className="left-4 p-3 "
                     key={featured.description}
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}

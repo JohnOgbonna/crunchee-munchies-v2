@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { chinChin750Hero as heroImage } from "../data/images";
 
 export default function Hero() {

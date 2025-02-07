@@ -1,17 +1,18 @@
-export type itemTypes = {
-    chinChin: 'Chin-Chin',
-    buns: 'Buns'
-    puffPuff: 'Puff-Puff'
+export enum itemType {
+    chinChin = 'chinChin',
+    buns = 'buns',
+    puffPuff = 'puff-puff'
 }
 
 export type item = {
     id: string,
-    type: keyof itemTypes
+    type: keyof itemType,
     name: string,
     description: string
     size_variants?: itemSizeVariation[],
     flavor_variant?: string,
-    mostPopular?: boolean
+    mostPopular?: boolean,
+    heroImage: string
 }
 
 export type itemSizeVariation = {
@@ -20,10 +21,12 @@ export type itemSizeVariation = {
     name: string,
     price: number,
     description: string,
-    type: keyof itemTypes,
+    type: itemType,
     minimumQuantity?: number,
     maximumQuantity?: number,
-    url?: string
+    url?: string,
+    savings?: number,
+    bundleSize?: number
 }
 
 export interface featuredItem {

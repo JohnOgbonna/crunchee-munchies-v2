@@ -34,7 +34,7 @@ export default function Featured() {
 
     return (
         <div>
-            <div className="min-h-[550px] h-[70vh] rounded-lg md:max-h-[800px] md:min-h-[600px] mb-4 md:h-[50vh] lg:min-h-[700px] p-4 flex flex-col items-center justify-center max-w-[1440px] mx-auto">
+            <div className="min-h-[550px] h-[70vh] rounded-lg md:max-h-[800px] mb-4 md:h-[50vh] justify-center p-4 flex flex-col items-center max-w-[1440px] mx-auto">
                 <h2 className="font-bold text-[1.3rem] self-start md:text-[1.6rem]">Featured</h2>
                 <div className=" w-full">
                     <Link href={featuredSections[featuredIndex].link} className="block w-full">

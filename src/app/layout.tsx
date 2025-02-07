@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/core_components/navbar/navbar";
+import { OrderProvider } from "./context/OrderContext"; // Import OrderProvider
 
 export const metadata: Metadata = {
   title: "Crunchee Munchies",
@@ -15,11 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-       
-      >
-        <Navbar/>
-        {children}
+      <body>
+        <OrderProvider> {/* Wrap the entire app with OrderProvider */}
+          <Navbar />
+          {children}
+        </OrderProvider>
       </body>
     </html>
   );

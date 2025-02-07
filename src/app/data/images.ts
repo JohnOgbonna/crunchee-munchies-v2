@@ -2,3 +2,6 @@ export const chinChin750Group = 'https://cruncheemunchies.s3.us-west-2.amazonaws
 export const chinChinBulkOrder = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-bulk-order.png'
 export const chinChinBulk = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-bulk.png'
 export const chinChin750Hero = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-750-hero.png'
+export const buns1 = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/buns1.png'
+export const possibleFlavors = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/possible-flavors.png'
+export const worldWideShipping = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/worldwide-shipping.png'

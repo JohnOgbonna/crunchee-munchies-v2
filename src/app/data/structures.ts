@@ -1,5 +1,5 @@
 export const navSections = {
-    store: 'Store',
+    store: 'Shop',
     about: 'About',
     whereToFindUs: 'Where to find us',
     connect: 'Connect',
