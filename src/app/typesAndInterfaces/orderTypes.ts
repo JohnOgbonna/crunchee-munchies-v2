@@ -4,8 +4,15 @@ export enum itemType {
     puffPuff = 'puff-puff'
 }
 
+export enum itemId {
+    chin_chin_standard = 'ch-1',
+    chin_chin_wholesale = 'ch-w',
+    chin_chin_event_order = 'ch-sp',
+    chin_chin_bundle = 'ch-b',
+}
+
 export type item = {
-    id: string,
+    id: itemId
     type: keyof itemType,
     name: string,
     description: string
@@ -34,4 +41,25 @@ export interface featuredItem {
     description: string,
     link: string,
     image?: string
+}
+
+export interface orderVariantion {
+    variantId: string;
+    quantity: number;
+    notes?: string;
+}
+
+export interface orderItemGroup {
+    id: itemId;
+    items: orderVariantion[];
+}
+
+export interface OrderContextType {
+    orders: orderItemGroup[];
+    addOrder: (id: itemId, variant: orderVariantion) => void;
+    removeOrder: (id: itemId) => void;
+    clearOrders: () => void;
+    increaseQuantity: (id: itemId, variantId: string) => void;
+    decreaseQuantity: (id: itemId, variantId: string) => void;
+    clearItem: (id: itemId, variantId: string) => void;
 }

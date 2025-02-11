@@ -1,39 +1,25 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
-
-enum itemId {
-    chin_chin_standard = 'ch-1',
-    chin_chin_wholesale = 'ch-w',
-    chin_chin_event_order = 'ch-sp',
-    chin_chin_bundle = 'ch-b',
-}
-
-interface orderVariantion {
-    variantId: string;
-    quantity: number;
-    notes?: string;
-}
-
-interface orderItemGroup {
-    id: itemId;
-    items: orderVariantion[];
-}
-
-interface OrderContextType {
-    orders: orderItemGroup[];
-    addOrder: (id: itemId, variant: orderVariantion) => void;
-    removeOrder: (id: itemId) => void;
-    clearOrders: () => void;
-    increaseQuantity: (id: itemId, variantId: string) => void;
-    decreaseQuantity: (id: itemId, variantId: string) => void;
-    clearItem: (id: itemId, variantId: string) => void;
-}
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { itemId, OrderContextType, orderItemGroup, orderVariantion } from "../typesAndInterfaces/orderTypes";
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
     const [orders, setOrders] = useState<orderItemGroup[]>([]);
+
+    // Load orders from local storage on mount
+    useEffect(() => {
+        const storedOrders = localStorage.getItem("orders");
+        if (storedOrders) {
+            setOrders(JSON.parse(storedOrders));
+        }
+    }, []);
+
+    // Save orders to local storage whenever they change
+    useEffect(() => {
+        localStorage.setItem("orders", JSON.stringify(orders));
+    }, [orders]);
 
     // Add an order
     const addOrder = (id: itemId, variant: orderVariantion) => {

@@ -13,7 +13,7 @@ export default function Navbar() {
                 <div className={`flex justify-between  bg-orange-200 p-2 max-w-[1400px]`}>
                     <h1 className={`font-bold cursor-pointer`}>Crunchee Munchies</h1>
                     {/* hamburger menu */}
-                    <svg width="24" id="hamburger" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    <svg width="24" id="hamburger" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                         className={`md:hidden cursor-pointer`}
                         onClick={() => setIsOpen(!isOpen)}>
                         <line x1="3" y1="12" x2="21" y2="12" />
