@@ -19,7 +19,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, link }) => {
             </div>
             <div>
                 <h2 className="text-xl font-semibold">{item.name}</h2>
-                <p className="text-gray-700">{item.description}</p>
+                <p className="text-gray-700 line-clamp-2 hover:line-clamp-none">{item.description}</p>
             </div>
         </Link>
     );

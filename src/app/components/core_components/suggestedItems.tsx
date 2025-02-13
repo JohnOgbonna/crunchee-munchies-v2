@@ -22,7 +22,7 @@ const SuggestedItems = ({ items }: { items: item[] }) => {
             <h3 className="text-2xl font-bold mb-8">More From Our Shop</h3>
             <div
                 ref={scrollRef}
-                className="flex space-x-4 overflow-x-scroll scrollbar-hide w-full md:space-x-8 lg:justify-center"
+                className="flex space-x-4 overflow-x-scroll scrollbar-hide w-full md:space-x-8"
             >
                 {items.map((item) => (
                     <SuggestedItemCard key={item.id} item={item} />

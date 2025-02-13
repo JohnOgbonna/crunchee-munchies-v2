@@ -13,7 +13,7 @@ export enum itemId {
 
 export type item = {
     id: itemId
-    type: keyof itemType,
+    type: itemType,
     name: string,
     description: string
     size_variants?: itemSizeVariation[],

@@ -27,6 +27,10 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
       </div>
       <div>
         <div className="flex flex-col items-center">
+            {
+                selectedVariation.savings && 
+                <p className="text-white font-semibold py-2 px-4 bg-red-700 rounded-[20px] mb-4 md:display-none">{`Savings of  $${selectedVariation.savings}!`}</p>
+            }
           <div>
             <h2 className="text-lg font-semibold">{selectedVariation.name}</h2>
             <p className="text-gray-600">Price: ${selectedVariation.price}</p>
@@ -43,7 +47,6 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
             >
               -
             </button>
-
             <input
               type="number"
               value={quantity}

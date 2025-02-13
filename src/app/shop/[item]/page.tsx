@@ -8,7 +8,6 @@ import { itemDataMap, shopLinks } from "@/app/data/items";
 import ItemVariationSelector from "@/app/components/supporting_components/itemVariationSelector";
 import { Toaster, toast } from "sonner";
 import SuggestedItems from "@/app/components/core_components/suggestedItems";
-import OrderSummary from "@/app/components/supporting_components/orderSummary";
 import SelectedVariationDisplay from "@/app/components/supporting_components/selectedVariationDisplay";
 import Link from "next/link";
 
@@ -19,7 +18,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const selectedItem: item | undefined = itemDataMap[item as keyof typeof itemDataMap];
   if (!selectedItem) return <div className="text-center">Item not found</div>;
 
-  const { id, size_variants, name } = selectedItem;
+  const { id, size_variants, name, description } = selectedItem;
   const selectedVariantId = searchParams.get("variant") || "";
   const [selectedVariation, setSelectedVariation] = useState<itemSizeVariation | null>(null);
   const [quantity, setQuantity] = useState(0);
@@ -78,7 +77,6 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
     setOrderUpdated(false);
   };
 
-
   return (
     <div className="p-4 text-slate-700 flex flex-col max-w-[1440px] mx-auto">
       <Toaster richColors position="top-center" closeButton={true} />
@@ -91,20 +89,21 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
         </Link>
         <h2 className="text-2xl font-bold sm:text-center">{name}</h2>
       </div>
+      <p className="max-w-[600px] mx-auto mt-4 mb-8 p-2 bg-[#f5e3c5] rounded-lg border-[1px] shadow-md md:mb-10 lg:max-w-[750px]">{description}</p>
       <div className="md:flex md:items-center md:justify-center gap-4 items-start mx-auto ">
         <ItemVariationSelector
           itemId={id}
           variations={size_variants ?? []}
           selectedVariantId={selectedVariantId}
         />
-        {selectedVariation &&  
-        <SelectedVariationDisplay
-          selectedVariation={selectedVariation}
-          quantity={quantity}
-          handleQuantityChange={handleQuantityChange}
-          handleAddToOrder={handleAddToOrder}
-          orderUpdated={orderUpdated}
-        />
+        {selectedVariation &&
+          <SelectedVariationDisplay
+            selectedVariation={selectedVariation}
+            quantity={quantity}
+            handleQuantityChange={handleQuantityChange}
+            handleAddToOrder={handleAddToOrder}
+            orderUpdated={orderUpdated}
+          />
         }
       </div>
       <p className="mt-4 font-semibold text-center">{selectedVariation?.description}</p>
