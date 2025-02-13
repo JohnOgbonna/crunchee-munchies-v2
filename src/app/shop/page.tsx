@@ -2,10 +2,7 @@ import ItemCard from "../components/supporting_components/itemCard";
 import { item, itemId } from "../typesAndInterfaces/orderTypes";
 import { chin_chin_standard, chin_chin_wholesale, chin_chin_event_order, chin_chin_bundle, shopLinks as links } from "../data/items";
 
-
 const items: item[] = [chin_chin_standard, chin_chin_wholesale, chin_chin_event_order, chin_chin_bundle];
-
-
 
 const Shop: React.FC = () => {
     return (

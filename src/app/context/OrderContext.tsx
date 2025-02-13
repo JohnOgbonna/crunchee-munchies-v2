@@ -1,12 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { itemId, OrderContextType, orderItemGroup, orderVariantion } from "../typesAndInterfaces/orderTypes";
+import { itemId, OrderContextType, orderVariantion } from "../typesAndInterfaces/orderTypes";
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
-    const [orders, setOrders] = useState<orderItemGroup[]>([]);
+    const [orders, setOrders] = useState<OrderContextType["orders"]>({});
 
     // Load orders from local storage on mount
     useEffect(() => {
@@ -18,91 +18,102 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     // Save orders to local storage whenever they change
     useEffect(() => {
-        localStorage.setItem("orders", JSON.stringify(orders));
+        if (Object.keys(orders).length > 0) {
+            localStorage.setItem("orders", JSON.stringify(orders));
+        } else {
+            localStorage.removeItem("orders");
+        }
     }, [orders]);
 
-    // Add an order
+    // Add an order or update existing quantity
     const addOrder = (id: itemId, variant: orderVariantion) => {
         setOrders(prevOrders => {
-            const existingOrder = prevOrders.find(order => order.id === id);
-            if (existingOrder) {
-                return prevOrders.map(order =>
-                    order.id === id
-                        ? { ...order, items: [...order.items, variant] }
-                        : order
-                );
+            const newOrders = { ...prevOrders };
+
+            if (!newOrders[id]) {
+                newOrders[id] = { variations: {} };
             }
-            return [...prevOrders, { id, items: [variant] }];
+
+            if (variant.quantity > 0) { // Ensure we only add if quantity is > 0
+                newOrders[id].variations[variant.variantId] = { quantity: variant.quantity };
+            }
+            
+            if (variant.quantity === 0) {
+                delete newOrders[id].variations[variant.variantId];
+                if (Object.keys(newOrders[id].variations).length === 0) {
+                    delete newOrders[id];
+                }
+            }
+
+            return newOrders;
         });
     };
 
-    // Remove an entire order group
+    // Remove an entire item group
     const removeOrder = (id: itemId) => {
-        setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
+        setOrders(prevOrders => {
+            const newOrders = { ...prevOrders };
+            delete newOrders[id];
+            return newOrders;
+        });
     };
 
     // Clear all orders
     const clearOrders = () => {
-        setOrders([]);
+        setOrders({});
     };
 
     // Increase quantity of a variant
     const increaseQuantity = (id: itemId, variantId: string) => {
-        setOrders(prevOrders =>
-            prevOrders.map(order =>
-                order.id === id
-                    ? {
-                          ...order,
-                          items: order.items.map(item =>
-                              item.variantId === variantId
-                                  ? { ...item, quantity: item.quantity + 1 }
-                                  : item
-                          ),
-                      }
-                    : order
-            )
-        );
+        setOrders(prevOrders => {
+            const newOrders = { ...prevOrders };
+
+            if (newOrders[id] && newOrders[id].variations[variantId]) {
+                newOrders[id].variations[variantId].quantity += 1;
+            }
+
+            return newOrders;
+        });
     };
 
     // Decrease quantity, remove if zero
     const decreaseQuantity = (id: itemId, variantId: string) => {
-        setOrders(prevOrders =>
-            prevOrders
-                .map(order =>
-                    order.id === id
-                        ? {
-                              ...order,
-                              items: order.items
-                                  .map(item =>
-                                      item.variantId === variantId
-                                          ? { ...item, quantity: item.quantity - 1 }
-                                          : item
-                                  )
-                                  .filter(item => item.quantity > 0), // Remove item if quantity is 0
-                          }
-                        : order
-                )
-                .filter(order => order.items.length > 0) // Remove empty order groups
-        );
+        setOrders(prevOrders => {
+            const newOrders = { ...prevOrders };
+
+            if (newOrders[id] && newOrders[id].variations[variantId]) {
+                if (newOrders[id].variations[variantId].quantity > 1) {
+                    newOrders[id].variations[variantId].quantity -= 1;
+                } else {
+                    delete newOrders[id].variations[variantId];
+                }
+
+                if (Object.keys(newOrders[id].variations).length === 0) {
+                    delete newOrders[id];
+                }
+            }
+
+            return newOrders;
+        });
     };
 
-    // Clear a specific item variation (with confirmation)
+    // Clear a specific item variation
     const clearItem = (id: itemId, variantId: string) => {
-        const confirmRemove = window.confirm("Are you sure you want to remove this item?");
-        if (!confirmRemove) return;
+        if (!window.confirm("Are you sure you want to remove this item?")) return;
 
-        setOrders(prevOrders =>
-            prevOrders
-                .map(order =>
-                    order.id === id
-                        ? {
-                              ...order,
-                              items: order.items.filter(item => item.variantId !== variantId),
-                          }
-                        : order
-                )
-                .filter(order => order.items.length > 0) // Remove empty order groups
-        );
+        setOrders(prevOrders => {
+            const newOrders = { ...prevOrders };
+
+            if (newOrders[id]) {
+                delete newOrders[id].variations[variantId];
+
+                if (Object.keys(newOrders[id].variations).length === 0) {
+                    delete newOrders[id];
+                }
+            }
+
+            return newOrders;
+        });
     };
 
     return (

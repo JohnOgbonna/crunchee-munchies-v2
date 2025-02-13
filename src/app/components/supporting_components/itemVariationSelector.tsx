@@ -12,7 +12,6 @@ interface ItemVariationSelectorProps {
 }
 
 const ItemVariationSelector: React.FC<ItemVariationSelectorProps> = ({ itemId, variations, selectedVariantId }) => {
-    const { addOrder } = useOrderContext();
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
@@ -21,17 +20,14 @@ const ItemVariationSelector: React.FC<ItemVariationSelectorProps> = ({ itemId, v
         const params = new URLSearchParams(searchParams.toString());
         params.set("variant", variantId);
         router.replace(`${pathname}?${params.toString()}`);
-        
-        // Add selected variation to order context with default quantity 1
-        addOrder(itemId as any, { variantId, quantity: 1 });
     };
 
     return (
-        <div className="flex justify-center md:flex-col sm:mb-4 space-x-2 md:space-x-0 md:space-y-2 overflow-auto md:overflow-visible p-2 md:w-[30%]">
+        <div className="flex justify-center md:flex-col sm:mb-4 space-x-2 md:space-x-0 md:space-y-2 overflow-auto md:overflow-visible p-2 md:w-[200px]">
             {variations && variations.map((variation) => (
                 <button
                     key={variation.id}
-                    className={`px-4 py-2 border rounded-lg ${selectedVariantId === variation.id ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                    className={`px-4 py-2 border rounded-lg text-[1rem] ${selectedVariantId === variation.id ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
                     onClick={() => handleSelectVariation(variation.id)}
                 >
                     {variation.name}

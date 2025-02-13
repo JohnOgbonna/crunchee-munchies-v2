@@ -55,7 +55,15 @@ export interface orderItemGroup {
 }
 
 export interface OrderContextType {
-    orders: orderItemGroup[];
+    orders: {
+        [id in itemId]?: {
+            variations: {
+                [variantId: string]: {
+                    quantity: number;
+                };
+            };
+        };
+    };
     addOrder: (id: itemId, variant: orderVariantion) => void;
     removeOrder: (id: itemId) => void;
     clearOrders: () => void;

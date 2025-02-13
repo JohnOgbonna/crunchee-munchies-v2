@@ -6,7 +6,7 @@ export const chinChin750: itemSizeVariation = {
     id: 'ch-1-750',
     name: '750g',
     price: 21.99,
-    description: '750g pack.',
+    description: '750g Pack. Our most popular size. Great for all occasions!',
     type: 'chinChin',
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin750g.png'
 
@@ -17,7 +17,7 @@ export const chinChin1200: itemSizeVariation = {
     id: 'ch-1-1200',
     name: '1.2kg',
     price: 31.99,
-    description: '1.2KG pack.',
+    description: '1.2kg Pack. For those who need just a little bit more!',
     type: 'chinChin',
     maximumQuantity: 30
 }
@@ -27,7 +27,7 @@ export const chinChin2500: itemSizeVariation = {
     id: 'ch-1-2500',
     name: '2.5kg',
     price: 51.99,
-    description: '2.5KG pack.',
+    description: '2.5kg Pack. For when you simply just need to stock up!',
     type: 'chinChin',
     maximumQuantity: 30,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin2500g.png'
@@ -45,9 +45,9 @@ export const chin_chin_standard: item = {
 export const chinChinByKg: itemSizeVariation = {
     parentId: 'ch-w',
     id: 'ch-by-kg',
-    name: 'Chin-Chin (per KG)',
+    name: 'Chin-Chin (per kg)',
     price: 20,
-    description: 'Buy Chin Chin per KG',
+    description: 'Buy Chin Chin per kg',
     type: 'chinChin',
     minimumQuantity: 3,
     maximumQuantity: 40,
@@ -58,7 +58,7 @@ export const chin_chin_wholesale: item = {
     id: itemId.chin_chin_wholesale,
     type: 'chinChin',
     name: 'Chin-Chin Wholesale',
-    description: 'Order Chin Chin by KG. Great for large events and resale (minimum 3KG)',
+    description: 'Order Chin Chin by kg. Great for large events and resale (minimum 3kg)',
     size_variants: [chinChinByKg],
     heroImage: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-bulk-order.png'
 }
@@ -100,7 +100,7 @@ export const chinChinBundle20x140: itemSizeVariation = {
     id: 'ch-b-20x140',
     name: '130g - Pack of 20',
     price: 84.99,
-    description: '20x130g pack.',
+    description: '20x140g pack.',
     type: 'chinChin',
     savings: 15,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-20x140g.png',

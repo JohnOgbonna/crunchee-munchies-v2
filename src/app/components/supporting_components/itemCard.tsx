@@ -9,7 +9,7 @@ interface ItemCardProps {
 
 const ItemCard: React.FC<ItemCardProps> = ({ item, link }) => {
     return (
-        <Link href={link} className="bg-[#f5e3c5] rounded-lg shadow-md hover:shadow-lg transition-all duration-300 min-h-[400px] flex flex-col items-center cursor-pointer justify-between p-4">
+        <Link href={`/${link}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`} className="bg-[#f5e3c5] rounded-lg shadow-md hover:shadow-lg transition-all duration-300 min-h-[400px] flex flex-col items-center cursor-pointer justify-between p-4">
             <div className="flex-1 flex items-center justify-center mb-2 w-full">
                 <img
                     src={item.heroImage}
