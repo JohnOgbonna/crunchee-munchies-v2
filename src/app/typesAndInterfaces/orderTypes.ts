@@ -23,7 +23,7 @@ export type item = {
 }
 
 export type itemSizeVariation = {
-    parentId: string
+    parentId: itemId
     id: string,
     name: string,
     price: number,

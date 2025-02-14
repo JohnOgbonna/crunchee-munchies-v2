@@ -21,7 +21,7 @@ const SuggestedItemCard = ({ item }: SuggestedItemCardProps) => {
             </div>
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:rounded-lg transition-opacity">
+            <div className="relative inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:rounded-lg transition-opacity">
                 <span className="text-white text-lg font-semibold">Shop {item.name}</span>
             </div>
         </Link>

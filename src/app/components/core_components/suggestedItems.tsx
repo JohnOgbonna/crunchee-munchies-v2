@@ -18,7 +18,7 @@ const SuggestedItems = ({ items }: { items: item[] }) => {
     };
 
     return (
-        <div className="mt-[100px] relative">
+        <div className="mt-[100px] ">
             <h3 className="text-2xl font-bold mb-8">More From Our Shop</h3>
             <div
                 ref={scrollRef}

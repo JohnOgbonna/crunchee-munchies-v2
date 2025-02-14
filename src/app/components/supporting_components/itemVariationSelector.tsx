@@ -23,7 +23,7 @@ const ItemVariationSelector: React.FC<ItemVariationSelectorProps> = ({ itemId, v
     };
 
     return (
-        <div className="flex justify-center md:flex-col sm:mb-4 space-x-2 md:space-x-0 md:space-y-2 overflow-auto md:overflow-visible p-2 md:w-[200px]">
+        <div className="flex justify-center md:flex-col sm:mb-4 space-x-2 md:space-x-0 md:space-y-2 overflow-auto md:overflow-visible p-2 md:w-[150px]">
             {variations && variations.map((variation) => (
                 <button
                     key={variation.id}

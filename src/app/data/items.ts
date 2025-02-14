@@ -87,7 +87,7 @@ export const chinChinBundle10x750: itemSizeVariation = {
     id: 'ch-b-10x750',
     name: '750g - Pack of 10',
     price: 184.99,
-    description: '10x750g pack.',
+    description: 'A 10 pack of our most popular size. Save $35!',
     type: itemType.chinChin,
     savings: 35,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-10x750g.png',
@@ -98,10 +98,10 @@ export const chinChinBundle20x140: itemSizeVariation = {
     parentId: 'ch-b',
     id: 'ch-b-20x140',
     name: '130g - Pack of 20',
-    price: 84.99,
-    description: '20x140g pack.',
+    price: 89.99,
+    description: 'Stock up your snack closet with 20 packs of our snack size. Save $10!',
     type: itemType.chinChin,
-    savings: 15,
+    savings: 10,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-20x140g.png',
     bundleSize: 20,
     maximumQuantity: 5
@@ -109,7 +109,7 @@ export const chinChinBundle20x140: itemSizeVariation = {
 export const chin_chin_bundle: item = {
     id: itemId.chin_chin_bundle,
     type: itemType.chinChin,
-    name: 'Chin-Chin Bundle',
+    name: 'Bundle Deals',
     description: 'Save with these special bundle package deals!',
     size_variants: [chinChinBundle10x750, chinChinBundle20x140],
     heroImage: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-10x750g.png'

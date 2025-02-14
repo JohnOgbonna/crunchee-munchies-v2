@@ -1,5 +1,7 @@
 import React from "react";
 import { itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
+import OrderSummary from "./orderSummary";
+import { useOrderContext } from "@/app/context/OrderContext";
 
 interface SelectedVariationDisplayProps {
   selectedVariation: itemSizeVariation;
@@ -16,6 +18,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
   handleAddToOrder,
   orderUpdated,
 }) => {
+  const { orders } = useOrderContext();
   return (
     <div className="flex flex-col md:flex-row gap-4 text-center md:text-left md:items-center md:w-[70%] md:min-w-[530px] lg:min-w-[600px] mb-6">
       <div className="h-[400px] lg:min-w-[350px] flex items-center justify-center overflow-hidden">
@@ -67,6 +70,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
           >
             Update Order
           </button>
+          <OrderSummary selectedItemId={selectedVariation.parentId} orders={orders}/>
         </div>
       </div>
     </div>
