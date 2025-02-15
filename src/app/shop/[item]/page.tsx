@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
-import { itemDataMap, shopLinks } from "@/app/data/items";
+import { itemDataMap } from "@/app/data/items";
 import ItemVariationSelector from "@/app/components/supporting_components/itemVariationSelector";
 import { Toaster, toast } from "sonner";
 import SuggestedItems from "@/app/components/core_components/suggestedItems";
 import SelectedVariationDisplay from "@/app/components/supporting_components/selectedVariationDisplay";
 import Link from "next/link";
+import OrderSummary from "@/app/components/supporting_components/orderSummary";
 
 const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const searchParams = useSearchParams();
@@ -37,45 +38,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
       setQuantity(existingQuantity ?? minQuantity);
     }
   }, [selectedVariation, orders]);
-
-  const handleQuantityChange = (newQuantity: number, viaButton = false) => {
-    if (!selectedVariation) return;
-
-    const minOrderQuantity = selectedVariation.minimumQuantity || 0;
-    const maxOrderQuantity = selectedVariation.maximumQuantity || 300;
-
-    if (viaButton && newQuantity < minOrderQuantity) {
-      toast.error(`Minimum order quantity for ${selectedVariation.name} is ${minOrderQuantity}`);
-      return;
-    }
-    if (viaButton && newQuantity > maxOrderQuantity) {
-      toast.error(`Maximum order quantity for ${selectedVariation.name} is ${maxOrderQuantity}`);
-      return;
-    }
-
-    setQuantity(newQuantity);
-    setOrderUpdated(true);
-  };
-  const minOrderQuantity = selectedVariation?.minimumQuantity || 0;
-  const maxOrderQuantity = selectedVariation?.maximumQuantity || 300;
-
-
-  const handleAddToOrder = () => {
-    if (!selectedVariation) return;
-    if (quantity < minOrderQuantity) {
-      toast.error(`Minimum order quantity for ${selectedVariation.name} is ${minOrderQuantity}`);
-      setQuantity(minOrderQuantity);
-      return;
-    }
-    if (quantity > maxOrderQuantity) {
-      toast.error(`Maximum order quantity for ${selectedVariation.name} is ${maxOrderQuantity}`);
-      setQuantity(maxOrderQuantity);
-      return;
-    }
-
-    addOrder(id, { variantId: selectedVariation.id, quantity });
-    setOrderUpdated(false);
-  };
+  
 
   return (
     <div className="p-4 text-slate-700 flex flex-col max-w-[1440px] mx-auto">
@@ -99,18 +62,17 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
         {selectedVariation &&
           <SelectedVariationDisplay
             selectedVariation={selectedVariation}
-            quantity={quantity}
-            handleQuantityChange={handleQuantityChange}
-            handleAddToOrder={handleAddToOrder}
-            orderUpdated={orderUpdated}
           />
         }
       </div>
+      <OrderSummary selectedItemId={id} orders={orders} />
       <p className="mt-4 font-semibold text-center">{selectedVariation?.description}</p>
-      <SuggestedItems items={Object.values(itemDataMap).filter((item) => item.id !== id)} />
+      <div className="z-0">
+        <SuggestedItems items={Object.values(itemDataMap).filter((item) => item.id !== id)} />
+      </div>
       {Object.keys(orders).length > 0 && (
         <button className={`fixed bottom-4 right-4 px-6 py-3 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white`}>
-          View Order
+          Complete Order
         </button>
       )}
     </div>

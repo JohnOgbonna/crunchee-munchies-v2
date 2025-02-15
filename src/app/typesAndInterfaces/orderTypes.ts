@@ -69,5 +69,5 @@ export interface OrderContextType {
     clearOrders: () => void;
     increaseQuantity: (id: itemId, variantId: string) => void;
     decreaseQuantity: (id: itemId, variantId: string) => void;
-    clearItem: (id: itemId, variantId: string) => void;
+    clearItemVariation: (id: itemId, variantId: string) => void;
 }

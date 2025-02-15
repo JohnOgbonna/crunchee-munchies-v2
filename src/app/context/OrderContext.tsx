@@ -98,7 +98,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     // Clear a specific item variation
-    const clearItem = (id: itemId, variantId: string) => {
+    const clearItemVariation = (id: itemId, variantId: string) => {
         if (!window.confirm("Are you sure you want to remove this item?")) return;
 
         setOrders(prevOrders => {
@@ -125,7 +125,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
                 clearOrders,
                 increaseQuantity,
                 decreaseQuantity,
-                clearItem,
+                clearItemVariation,
             }}
         >
             {children}

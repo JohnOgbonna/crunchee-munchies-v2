@@ -2,6 +2,8 @@ import React from "react";
 import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { shopLinks, itemDataMap } from "@/app/data/items";
 import Link from "next/link";
+import CloseIcon from "./icons/close";
+import { useOrderContext } from "@/app/context/OrderContext";
 
 interface OrderSummaryProps {
     selectedItemId: itemId;
@@ -15,17 +17,22 @@ interface OrderSummaryProps {
         };
     };
     isNav?: boolean; // New prop to indicate if it's used in the navbar
+    closeCart?: () => void
 }
 
-const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isNav = false }) => {
+const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isNav = false, closeCart }) => {
     const selectedOrder = orders[selectedItemId];
-
+    const { clearItemVariation } = useOrderContext();
     if (!selectedOrder) return null;
 
     const variations: { [variantId: string]: itemSizeVariation } = {};
     itemDataMap[shopLinks[selectedItemId] as keyof typeof itemDataMap].size_variants?.forEach(variation => {
         variations[variation.id] = variation;
     });
+
+    const handleClose = () => {
+        if (isNav && closeCart) closeCart();
+    }
 
     const selectedItem = itemDataMap[shopLinks[selectedItemId] as keyof typeof itemDataMap];
     let orderTotal = 0;
@@ -35,13 +42,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
     });
 
     return (
-        <div className="mt-6 p-4 border border-gray-300 rounded-lg bg-[#f5e3c5] max-w-[450px] shadow-md mx-auto md:min-w-[320px] lg:min-w-[350px]">
-            <div className="flex justify-between items-center">
-                <h3 className="text-md font-semibold mb-2">{`${selectedItem.name} Order Total: $${orderTotal.toFixed(2)}`}</h3>
+        <div className={`${isNav? 'mt-6' : ''}  p-2 md:p-4 border border-gray-300 rounded-lg bg-[#f5e3c5]  shadow-md sm:w-[90vw] md:max-w-[450px] mx-auto md:min-w-[340px] lg:min-w-[375px]`}>
+            <div className="flex justify-between items-center mb-2">
+                <h3 className="text-md font-semibold underline">{`${selectedItem.name} Order Total: $${orderTotal.toFixed(2)}`}</h3>
                 {isNav && (
                     <Link
                         href={`/shop/${shopLinks[selectedItemId]}`}
                         className="text-blue-500 text-sm font-semibold underline hover:text-blue-700"
+                        onClick={() => handleClose()}
                     >
                         Edit
                     </Link>
@@ -50,19 +58,25 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
             <ul className="space-y-1 flex flex-col justify-center">
                 {Object.entries(selectedOrder.variations).map(([variantId, orderItem]) =>
                     orderItem.quantity > 0 ? (
-                        <li key={variantId} className="flex gap-x-2 items-center text-gray-700 overflow-x-scroll w-fit text-[.8rem]">
-                            <span>
-                                <span className={`md:w-[120px] lg:w-[200px]`}>
+                        <li key={variantId} className="flex gap-x-2 items-center text-gray-700 overflow-x-scroll scrollbar-hide w-full text-[.8rem] justify-between">
+                            <span className={` w-[120px] md:w-[180px]`}>
+                                <span>
                                     {`${selectedItem.name}: ${variations[variantId].name} - `}
                                     <span className="font-semibold">{`$${variations[variantId].price}`}</span>
                                 </span>
                             </span>
                             <span className="font-semibold">{`x ${orderItem.quantity} = `}</span>
                             <span className="font-semibold">${(orderItem.quantity * variations[variantId].price).toFixed(2)}</span>
+                            <span className="cursor-pointer"
+                                onClick={() => clearItemVariation(selectedItemId, variantId)}
+                            ><CloseIcon className="hover:scale-105 transition-all duration-300"/></span>
                         </li>
                     ) : null
                 )}
             </ul>
+            {isNav &&
+                <h4 className="text-md cursor-pointer font-semibold mt-2 text-center text-red-600 hover:text-red-800 hover:underline">Complete Order</h4>
+            }
         </div>
     );
 };

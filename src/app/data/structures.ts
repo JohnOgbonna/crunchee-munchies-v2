@@ -3,7 +3,7 @@ import { itemId } from "../typesAndInterfaces/orderTypes"
 import { chin_chin_standard, itemDataMap} from "./items"
 
 
-interface NavSubsections {
+export interface NavSubsections {
     [key: string]: {
         [key: string]: {
             link: string;
