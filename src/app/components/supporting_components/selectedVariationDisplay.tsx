@@ -111,7 +111,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
             Update Order
           </button>
           {orders[selectedVariation.parentId] && (
-            <Link href="/" className="text-md font-semibold text-red-600 hover:underline hover:red-800 mt-4 text-center hover:scale-105 transition-all duration-300">
+            <Link href={`order?item=${selectedVariation.parentId}`} className="text-md font-semibold text-red-600 hover:underline hover:red-800 mt-4 text-center hover:scale-105 transition-all duration-300">
               Complete Order
             </Link>
           )}

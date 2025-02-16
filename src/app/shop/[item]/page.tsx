@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
-import { itemDataMap } from "@/app/data/items";
+import { itemDataMap, shopLinks } from "@/app/data/items";
 import ItemVariationSelector from "@/app/components/supporting_components/itemVariationSelector";
 import { Toaster, toast } from "sonner";
 import SuggestedItems from "@/app/components/core_components/suggestedItems";
@@ -23,7 +23,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const selectedVariantId = searchParams.get("variant") || "";
   const [selectedVariation, setSelectedVariation] = useState<itemSizeVariation | null>(null);
   const [quantity, setQuantity] = useState(0);
-  const [orderUpdated, setOrderUpdated] = useState(false);
+
 
   useEffect(() => {
     setSelectedVariation(() =>
@@ -38,7 +38,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
       setQuantity(existingQuantity ?? minQuantity);
     }
   }, [selectedVariation, orders]);
-  
+
 
   return (
     <div className="p-4 text-slate-700 flex flex-col max-w-[1440px] mx-auto">
@@ -71,9 +71,11 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
         <SuggestedItems items={Object.values(itemDataMap).filter((item) => item.id !== id)} />
       </div>
       {Object.keys(orders).length > 0 && (
-        <button className={`fixed bottom-4 right-4 px-6 py-3 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white`}>
-          Complete Order
-        </button>
+        <Link href={`/order?item=${shopLinks[id]}`}>
+          <button className={`fixed bottom-4 right-4 px-6 py-3 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white`}>
+            Complete Order
+          </button>
+        </Link>
       )}
     </div>
   );
