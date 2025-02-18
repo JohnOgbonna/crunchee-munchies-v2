@@ -39,7 +39,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, s
   let orderTotal = 0;
 
   return (
-    <div className="p-4 md:border md:shadow-md w-full">
+    <div className="p-4 md:border md:shadow-md w-full overflow-y-scroll">
       <div className="flex gap-4 mb-4 items-center">
         {/* Back Button */}
         <button

@@ -48,8 +48,8 @@ export const chinChinByKg: itemSizeVariation = {
     price: 20,
     description: 'Buy Chin Chin per kg',
     type: itemType.chinChin,
-    minimumQuantity: 3,
-    maximumQuantity: 40,
+    minimumQuantity: 10,
+    maximumQuantity: 100,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-bulk-order.png'
 }
 
@@ -57,7 +57,7 @@ export const chin_chin_wholesale: item = {
     id: itemId.chin_chin_wholesale,
     type: itemType.chinChin,
     name: 'Chin-Chin Wholesale',
-    description: 'Order Chin Chin by kg! Great for large events and resale (minimum 3kg)',
+    description: 'Order Chin Chin by kg! Great for large events and resale (minimum 10kg)',
     size_variants: [chinChinByKg],
     heroImage: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-bulk-order.png'
 }
@@ -70,7 +70,8 @@ export const chinChinEvent130: itemSizeVariation = {
     description: '130g Pack with Custom Label',
     type: itemType.chinChin,
     url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-special-130g.png',
-    maximumQuantity: 1000
+    maximumQuantity: 1000,
+    minimumQuantity: 20
 }
 
 export const chin_chin_event_order: item = {
