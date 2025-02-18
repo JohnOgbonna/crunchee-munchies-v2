@@ -44,7 +44,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
     });
 
     return (
-        <div className={`${isNav? 'mt-6' : ''} ${isSelected ? 'border-2 border-blue-500 shadow-xl' : ''} p-2 md:p-4 border border-gray-300 rounded-lg bg-[#f5e3c5] shadow-md sm:w-full max-w-[450px] mx-auto md:min-w-[340px] lg:min-w-[375px]`}>
+        <div className={`${isNav ? 'mt-6' : ''} ${isSelected && isOrderPage ? 'border-2 border-blue-500 shadow-xl' : 'border-gray-300 scale-95'} transition-all duration-400 ease-in-out p-2 md:p-4 border rounded-lg bg-[#f5e3c5] shadow-md sm:w-full max-w-[450px] mx-auto md:min-w-[340px] lg:min-w-[375px]`}>
             <div className="flex justify-between items-center mb-2">
                 <h3 className="text-md font-semibold underline">{`${selectedItem.name} Order Total: $${orderTotal.toFixed(2)}`}</h3>
                 {isNav && (
@@ -60,8 +60,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
             <ul className="space-y-1 flex flex-col justify-center">
                 {Object.entries(selectedOrder.variations).map(([variantId, orderItem]) =>
                     orderItem.quantity > 0 ? (
-                        <li key={variantId} className="flex gap-x-2 items-center text-gray-700  w-full text-[.8rem] justify-between">
-                            <span className={` w-[120px] md:w-[180px]`}>
+                        <li key={variantId} className={`flex gap-x-2 items-center text-gray-700  w-full text-[.8rem] md:text-[.9rem] justify-between`}>
+                            <span className={`w-[120px] md:w-[180px]`}>
                                 <span>
                                     {`${selectedItem.name}: ${variations[variantId].name} - `}
                                     <span className="font-semibold">{`$${variations[variantId].price}`}</span>
@@ -71,13 +71,15 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
                             <span className="font-semibold">${(orderItem.quantity * variations[variantId].price).toFixed(2)}</span>
                             <span className="cursor-pointer"
                                 onClick={() => clearItemVariation(selectedItemId, variantId)}
-                            ><CloseIcon className="hover:scale-105 transition-all duration-300"/></span>
+                            ><CloseIcon className="hover:scale-105 transition-all duration-300" /></span>
                         </li>
                     ) : null
                 )}
             </ul>
             {isNav &&
-                <Link href = {`/order?item=${shopLinks[selectedItemId]}`} className="text-md cursor-pointer font-semibold mt-2 text-center text-red-600 hover:text-red-800 hover:underline">Complete Order</Link>
+                <Link href={`/order?item=${shopLinks[selectedItemId]}`} className="text-md block cursor-pointer font-semibold mt-3 text-center text-red-600 hover:text-red-800 hover:underline w-full"
+                onClick={() => handleClose()}
+                >Complete Order</Link>
             }
         </div>
     );

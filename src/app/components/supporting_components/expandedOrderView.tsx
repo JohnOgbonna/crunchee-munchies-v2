@@ -3,10 +3,14 @@ import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { shopLinks, itemDataMap } from "@/app/data/items";
 import CloseIcon from "./icons/close";
 import { useOrderContext } from "@/app/context/OrderContext";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { SetStateAction } from "react";
+import CustomerDetailsForm from "./customerDetailsForm";
 
 interface ExpandedOrderViewProps {
   selectedItemId: itemId;
+  setSelectedItem: (value: SetStateAction<itemId | null>) => void;
   orders: {
     [id in itemId]?: {
       variations: {
@@ -19,9 +23,10 @@ interface ExpandedOrderViewProps {
   handleClose: () => void;
 }
 
-const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, orders, handleClose }) => {
+const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, setSelectedItem, orders, handleClose }) => {
   const { clearItemVariation } = useOrderContext();
   const selectedOrder = orders[selectedItemId];
+  const searchParams = useSearchParams();
 
   if (!selectedOrder) return null;
 
@@ -34,7 +39,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
   let orderTotal = 0;
 
   return (
-    <div className="p-4 border shadow-md w-full">
+    <div className="p-4 md:border md:shadow-md w-full">
       <div className="flex gap-4 mb-4 items-center">
         {/* Back Button */}
         <button
@@ -66,14 +71,13 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
           );
         })}
       </ul>
-      <h4 className="text-lg font-bold mt-4 text-center">Total: ${orderTotal.toFixed(2)}</h4>
-      <Link href={`/shop/${shopLinks[selectedItemId]}?variant=${Object.keys(selectedOrder.variations)[0]}`} className="block text-center text-blue-600 hover:text-blue-800 font-bold mt-4 underline">
-        Edit
-      </Link>
-      <Link href={`/order?item=${shopLinks[selectedItemId]}`} className="block text-center text-red-600 hover:text-red-800 font-bold mt-2 underline">
-        Complete Order
-      </Link>
-
+      <div className="flex gap-4 items-center justify-center mb-10 mt-4">
+        <h4 className="text-lg font-bold text-center">Total: ${orderTotal.toFixed(2)}</h4>
+        <Link href={`/shop/${shopLinks[selectedItemId]}?variant=${Object.keys(selectedOrder.variations)[0]}`} className="block text-center text-blue-600 hover:text-blue-800 font-bold underline">
+          Edit
+        </Link>
+      </div>
+      <CustomerDetailsForm />
     </div>
   );
 };
