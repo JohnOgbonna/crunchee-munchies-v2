@@ -6,8 +6,26 @@ export interface customerField {
     placeholder?: string,
     disclaimer?: string[],
     dependsOn?: string,
-    checkedByDefault?: boolean
+    checkedByDefault?: boolean,
+    listOptions?: { [key: string]: any };
 }
+
+export interface listOption {
+    id: string;
+    display: string;
+    dependsOn?: string;
+    checkedByDefault?: boolean;
+}
+
+export type preferedResponseTypeField = {
+    id: string;
+    display: string;
+    required: boolean;
+    inputType: string;
+    listOptions: { [key: string]: listOption};
+};
+
+
 export interface CustomerFormData {
     firstName: string;
     lastName: string;
@@ -86,5 +104,6 @@ export const customerFields: { [key: string]: customerField } = {
         required: true,
         inputType: 'text',
         dependsOn: 'needsDelivery',
-    }
+    },
+    
 }
