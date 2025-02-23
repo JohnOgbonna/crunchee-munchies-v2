@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import SuggestedItemCard from "../supporting_components/suggestedItemCard";
+import SuggestedItemCard from "../supporting_components/shop/suggestedItemCard";
 import { item } from "@/app/typesAndInterfaces/orderTypes";
 
 

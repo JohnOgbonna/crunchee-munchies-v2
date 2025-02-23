@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { itemId } from "@/app/typesAndInterfaces/orderTypes";
-import OrderSummary from "./orderSummary";
+import OrderSummary from "../order/orderSummary";
 
 interface OrderPanelProps {
     isCartOpen: boolean;

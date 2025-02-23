@@ -1,7 +1,7 @@
 'use client'
 import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { shopLinks, itemDataMap } from "@/app/data/items";
-import CloseIcon from "./icons/close";
+import CloseIcon from "../icons/close";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";

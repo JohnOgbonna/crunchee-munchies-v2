@@ -5,12 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { itemDataMap, shopLinks } from "@/app/data/items";
-import ItemVariationSelector from "@/app/components/supporting_components/itemVariationSelector";
+import ItemVariationSelector from "@/app/components/supporting_components/shop/itemVariationSelector";
 import { Toaster, toast } from "sonner";
 import SuggestedItems from "@/app/components/core_components/suggestedItems";
-import SelectedVariationDisplay from "@/app/components/supporting_components/selectedVariationDisplay";
+import SelectedVariationDisplay from "@/app/components/supporting_components/shop/selectedVariationDisplay";
 import Link from "next/link";
-import OrderSummary from "@/app/components/supporting_components/orderSummary";
+import OrderSummary from "@/app/components/supporting_components/order/orderSummary";
 
 const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const searchParams = useSearchParams();

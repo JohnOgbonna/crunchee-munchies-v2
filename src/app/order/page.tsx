@@ -1,8 +1,8 @@
 'use client'
-import ExpandedOrderView from "../components/supporting_components/expandedOrderView";
+import ExpandedOrderView from "../components/supporting_components/order/expandedOrderView";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { itemId } from "@/app/typesAndInterfaces/orderTypes";
-import OrderSummary from "../components/supporting_components/orderSummary";
+import OrderSummary from "../components/supporting_components/order/orderSummary";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { shopLinks } from "../data/items";

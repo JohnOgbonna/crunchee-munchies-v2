@@ -2,7 +2,7 @@ import React from "react";
 import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { shopLinks, itemDataMap } from "@/app/data/items";
 import Link from "next/link";
-import CloseIcon from "./icons/close";
+import CloseIcon from "../icons/close";
 import { useOrderContext } from "@/app/context/OrderContext";
 
 interface OrderSummaryProps {

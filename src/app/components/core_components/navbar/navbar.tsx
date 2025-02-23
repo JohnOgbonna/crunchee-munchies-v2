@@ -2,12 +2,11 @@
 
 import { navSections, NavSubsections, navSubsections } from "@/app/data/structures";
 import { useState } from "react";
-import { useOrderContext } from "@/app/context/OrderContext";
 import ShoppingCart from "../../supporting_components/icons/shoppingCart";
 import HamburgerMenu from "../../supporting_components/icons/hamburgerMenu";
-import OrderPanel from "../../supporting_components/orderPanel";
+import OrderPanel from "../../supporting_components/shop/orderPanel";
 import Link from "next/link";
-import { MobileSubsections, DesktopSubsections } from "../../supporting_components/navSubsections";
+import { MobileSubsections, DesktopSubsections } from "../../supporting_components/navBar/navSubsections";
 import CloseIcon from "../../supporting_components/icons/close";
 
 export default function Navbar() {
@@ -24,7 +23,7 @@ export default function Navbar() {
         <nav className="md:bg-orange-200 text-slate-700 z-20 md:z-10">
             <div className="md:flex md:justify-between max-w-[1440px] mx-auto">
                 <div className="flex justify-between bg-orange-200 p-2 max-w-[1400px]">
-                    <h1 className="font-bold cursor-pointer">Crunchee Munchies</h1>
+                    <Link href="/"><h1 className="font-bold cursor-pointer">Crunchee Munchies</h1></Link>
                     <div className="flex items-center">
                         <ShoppingCart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} hideOnMd={true} />
                         <HamburgerMenu actionState={isOpen} actionSet={setIsOpen} />

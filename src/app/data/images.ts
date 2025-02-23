@@ -5,3 +5,4 @@ export const chinChin750Hero = 'https://cruncheemunchies.s3.us-west-2.amazonaws.
 export const buns1 = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/buns1.png'
 export const possibleFlavors = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/possible-flavors.png'
 export const worldWideShipping = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/worldwide-shipping.png'
+export const chinChinGroup = 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin-group.png'
