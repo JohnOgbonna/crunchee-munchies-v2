@@ -1,4 +1,5 @@
 import { InstagramIFrame } from "../components/supporting_components/connect/instagramiFrame";
+import TikTokEmbed from "../components/supporting_components/connect/tikTokiFrame";
 import EmailIcon from "../components/supporting_components/icons/email";
 import InstagramIcon from "../components/supporting_components/icons/instagram";
 import TikTokIcon from "../components/supporting_components/icons/tikTok";
@@ -72,6 +73,7 @@ export const connectContent = {
                 name: 'TikTok',
                 description: 'Follow us on TikTok!',
                 link: 'https://www.tiktok.com/@crunchee.munchies',
+                iframe: TikTokEmbed,
                 icon: TikTokIcon
             }
         }

@@ -1,68 +1,27 @@
+'use client';
 import Link from 'next/link';
 import { connectContent } from '../data/connectContent';
+import SocialMediaSection from '../components/supporting_components/connect/socialMediaSection';
+import ContactFormSection from '../components/supporting_components/connect/contactFormSection';
+import {motion} from 'framer-motion';
 
 export default function Connect() {
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="max-w-[1440px] mx-auto p-4 space-y-20 text-slate-700">
+      <motion.h1 className="text-3xl font-bold mb-4"
+         variants={{
+          hidden: { opacity: .01, x: -155 },
+          visible: { opacity: 1, x: 0 }
+      }}
+      initial="hidden"
+      whileInView={"visible"}
+      transition={{ duration: 0.5, delay: 0.7, ease: "easeInOut", x: { type: "spring", stiffness: 30 }, opacity: { duration: .8, delay: 0.2, ease: "easeInOut" } }}
+
+      >Connect With Us</motion.h1>
       {/* Social Media Section */}
-      <section>
-        <h2 className="text-2xl font-bold text-center mb-4">
-          {connectContent.socialMedia.header}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.values(connectContent.socialMedia.networks).map((network) => (
-            <div
-              key={network.name}
-              className="p-4 border rounded-lg shadow-md flex flex-col items-center space-y-2"
-            >
-              <network.icon size={24} />
-              <h3 className="text-lg font-semibold">{network.name}</h3>
-              <p className="text-center text-sm">{network.description}</p>
-              <Link
-                href={network.link}
-                target="_blank"
-                className="text-primary hover:underline"
-              >
-                Visit {network.name}
-              </Link>
-              {'iframe' in network && network.iframe && <network.iframe />}
-            </div>
-          ))}
-        </div>
-      </section>
-
+     <SocialMediaSection />
       {/* Contact Form Section */}
-      <section>
-        <h2 className="text-2xl font-bold text-center mb-4">
-          {connectContent.contactForm.header}
-        </h2>
-        <p className="text-center mb-4">{connectContent.contactForm.description}</p>
-        <form className="space-y-4">
-          {Object.values(connectContent.contactForm.formFields).map((field) => (
-            <div key={field.id} className="flex flex-col">
-              <label className="font-medium" htmlFor={field.id}>{field.display}</label>
-              {field.inputType === 'radio' ? (
-                <div className="flex gap-4">
-                  {field.listOptions && Object.values(field.listOptions).map((option) => (
-                    <label key={option.id} className="flex items-center space-x-2">
-                      <input type="radio" name={field.id} id={option.id} defaultChecked={option.checkedByDefault} />
-                      <span>{option.display}</span>
-                    </label>
-                  ))}
-                </div>
-              ) : field.inputType === 'textarea' ? (
-                <textarea id={field.id} className="p-2 border rounded-md" required={field.required}></textarea>
-              ) : (
-                <input type={field.inputType} id={field.id} className="p-2 border rounded-md" required={field.required} />
-              )}
-            </div>
-          ))}
-          <button type="submit" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-opacity-90">
-            Send Message
-          </button>
-        </form>
-      </section>
-
+     <ContactFormSection />
       {/* Email Section */}
       <section className="text-center">
         <h2 className="text-xl font-bold">{connectContent.email.header}</h2>
