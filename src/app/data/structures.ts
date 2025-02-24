@@ -1,6 +1,4 @@
-import { link } from "fs"
-import { itemId } from "../typesAndInterfaces/orderTypes"
-import { chin_chin_standard, itemDataMap} from "./items"
+import { itemDataMap } from "./items"
 
 
 export interface NavSubsections {
@@ -14,16 +12,16 @@ export interface NavSubsections {
 export const navSections = {
     shop: 'Shop',
     about: 'About',
-    whereToFindUs: 'Where to find us',
+    whereToFindUs: 'Where to Find Us',
     connect: 'Connect',
 }
 
-export const navSubsections : NavSubsections = {
+export const navSubsections: NavSubsections = {
     shop: {
         [itemDataMap.chin_chin_standard.name]: {
             link: 'shop/chin_chin_standard',
         },
-       [ itemDataMap.chin_chin_wholesale.name]: {
+        [itemDataMap.chin_chin_wholesale.name]: {
             link: 'shop/chin_chin_wholesale',
         },
         [itemDataMap.chin_chin_event_order.name]: {

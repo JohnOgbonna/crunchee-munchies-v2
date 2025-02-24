@@ -32,7 +32,7 @@ export default function Navbar() {
         >
             <div className="md:flex md:justify-between max-w-[1440px] mx-auto">
                 <div className="flex justify-between bg-orange-200 p-2 max-w-[1400px]">
-                    <Link href="/"><h1 className="font-bold cursor-pointer">Crunchee Munchies</h1></Link>
+                    <Link href="/"><h1 className="font-bold cursor-pointer hover:underline text-[1.2rem] hover:scale-105 transition-all ease-in-out">Crunchee Munchies</h1></Link>
                     <div className="flex items-center">
                         <ShoppingCart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} hideOnMd={true} />
                         <HamburgerMenu actionState={isOpen} actionSet={setIsOpen} />
@@ -62,7 +62,7 @@ export default function Navbar() {
                             viewport={{ once: true }}
                         >
                             <div className="flex items-center md:w-auto" onClick={() => setIsOpen(false)}>
-                                <Link href={`/${key}`} className="text-[1.3rem] md:text-[1rem]">{value}</Link>
+                                <Link href={`/${key}`} className="text-[1.3rem] md:text-[1rem] hover:underline hover:scale-105 transition-all ease-in-out">{value}</Link>
                                 {navSubsections[key] && (
                                     <svg
                                         width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

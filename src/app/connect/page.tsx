@@ -7,7 +7,7 @@ import {motion} from 'framer-motion';
 
 export default function Connect() {
   return (
-    <div className="max-w-[1440px] mx-auto p-4 space-y-20 text-slate-700">
+    <div className="max-w-[1440px] mx-auto p-4 space-y-20 text-slate-700 pb-16">
       <motion.h1 className="text-3xl font-bold mb-4"
          variants={{
           hidden: { opacity: .01, x: -155 },

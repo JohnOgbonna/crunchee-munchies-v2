@@ -1,6 +1,6 @@
 'use client'
 import { motion } from "framer-motion";
-import SuggestedItemCard from "../supporting_components/shop/suggestedItemCard";
+import SuggestedItemCard from "./suggestedItemCard";
 import { item } from "@/app/typesAndInterfaces/orderTypes";
 
 

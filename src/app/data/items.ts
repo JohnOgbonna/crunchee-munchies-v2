@@ -1,7 +1,7 @@
 import { item, itemId, itemSizeVariation, itemType } from "../typesAndInterfaces/orderTypes"
 
 export const chinChin750: itemSizeVariation = {
-    parentId: 'ch-1',
+    parentId: itemId.chin_chin_standard,
     id: 'ch-1-750',
     name: '750g',
     price: 21.99,
@@ -12,7 +12,7 @@ export const chinChin750: itemSizeVariation = {
 }
 
 export const chinChin1200: itemSizeVariation = {
-    parentId: 'ch-1',
+    parentId: itemId.chin_chin_standard,
     id: 'ch-1-1200',
     name: '1.2kg',
     price: 31.99,
@@ -22,7 +22,7 @@ export const chinChin1200: itemSizeVariation = {
 }
 
 export const chinChin2500: itemSizeVariation = {
-    parentId: 'ch-1',
+    parentId: itemId.chin_chin_standard,
     id: 'ch-1-2500',
     name: '2.5kg',
     price: 51.99,
@@ -42,7 +42,7 @@ export const chin_chin_standard: item = {
 }
 
 export const chinChinByKg: itemSizeVariation = {
-    parentId: 'ch-w',
+    parentId: itemId.chin_chin_wholesale,
     id: 'ch-by-kg',
     name: 'Chin-Chin (per kg)',
     price: 20,
@@ -63,7 +63,7 @@ export const chin_chin_wholesale: item = {
 }
 
 export const chinChinEvent130: itemSizeVariation = {
-    parentId: 'ch-sp',
+    parentId: itemId.chin_chin_event_order,
     id: 'ch-sp-130',
     name: '130g',
     price: 4.99,
@@ -84,7 +84,7 @@ export const chin_chin_event_order: item = {
 }
 
 export const chinChinBundle10x750: itemSizeVariation = {
-    parentId: 'ch-b',
+    parentId: itemId.chin_chin_bundle,
     id: 'ch-b-10x750',
     name: '750g - Pack of 10',
     price: 184.99,
@@ -96,7 +96,7 @@ export const chinChinBundle10x750: itemSizeVariation = {
     maximumQuantity: 5
 }
 export const chinChinBundle20x140: itemSizeVariation = {
-    parentId: 'ch-b',
+    parentId: itemId.chin_chin_bundle,
     id: 'ch-b-20x140',
     name: '130g - Pack of 20',
     price: 89.99,

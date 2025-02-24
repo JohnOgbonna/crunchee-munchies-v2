@@ -7,7 +7,7 @@ import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { itemDataMap, shopLinks } from "@/app/data/items";
 import ItemVariationSelector from "@/app/components/supporting_components/shop/itemVariationSelector";
 import { Toaster, toast } from "sonner";
-import SuggestedItems from "@/app/components/core_components/suggestedItems";
+import SuggestedItems from "@/app/components/supporting_components/shop/suggestedItems";
 import SelectedVariationDisplay from "@/app/components/supporting_components/shop/selectedVariationDisplay";
 import Link from "next/link";
 import OrderSummary from "@/app/components/supporting_components/order/orderSummary";

@@ -14,7 +14,7 @@ export default function ShoppingCart(props: ShoppingCartProps) {
     const hasOrders = Object.keys(orders).length > 0;
     return (
         //  Shopping Cart Icon 
-         <div className={`relative cursor-pointer ${hideOnMd ? 'md:hidden' : ''} ${hideOnSm ? 'sm:hidden' : ''}`} onClick={() => setIsCartOpen(!isCartOpen)}>
+         <div className={`relative cursor-pointer ${hideOnMd ? 'md:hidden' : ''} ${hideOnSm ? 'sm:hidden' : ''} transition-all duration-300 hover:scale-110`} onClick={() => setIsCartOpen(!isCartOpen)}>
          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
              <circle cx="9" cy="21" r="1" />
              <circle cx="20" cy="21" r="1" />

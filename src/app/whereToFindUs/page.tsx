@@ -1,7 +1,7 @@
 'use client'
 import { whereToFindUsContent } from "../data/whereToFindUsContent";
 import { WhereToFindUsContent } from "../typesAndInterfaces/whereToFindUsTypes";
-import { PremiumSeller, SupplyToSeller } from "../components/core_components/whereToFindUs/sectionComponents";
+import { PremiumSeller, SupplyToSeller } from "../components/supporting_components/whereToFindUs/sectionComponents";
 import { motion } from "framer-motion";
 
 const WhereToFindUs = () => {

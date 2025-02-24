@@ -1,9 +1,8 @@
 'use client'
 import FeaturedSlideShow from "../components/supporting_components/feature_slideshow"
-import { chinChin750Group, chinChinBulkOrder, chinChinBulk } from "../data/images"
+import { chinChin750Group, chinChinBulkOrder } from "../data/images"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion";
 
 import { featuredItem } from "../typesAndInterfaces/orderTypes"
 const featuredSections: featuredItem[] = [
@@ -30,15 +29,14 @@ export default function Featured() {
         }, 8000)
         return () => clearInterval(interval)
     }, [])
- 
 
     return (
         <div>
+            <h2 className="font-bold text-[1.3rem] self-start md:text-[1.6rem] px-4">Featured</h2>
             <div className="min-h-[550px] h-[70vh] rounded-lg md:max-h-[800px] mb-4 md:h-[50vh] justify-center p-4 flex flex-col items-center max-w-[1440px] mx-auto">
-                <h2 className="font-bold text-[1.3rem] self-start md:text-[1.6rem]">Featured</h2>
                 <div className=" w-full">
                     <Link href={featuredSections[featuredIndex].link} className="block w-full">
-                      <FeaturedSlideShow sections={featuredSections} />
+                        <FeaturedSlideShow sections={featuredSections} />
                     </Link>
                 </div>
             </div>

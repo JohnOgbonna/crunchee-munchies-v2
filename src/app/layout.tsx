@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/core_components/navbar/navbar";
+import Footer from "./components/core_components/footer/footer";
 import { OrderProvider } from "./context/OrderContext"; // Import OrderProvider
 
 export const metadata: Metadata = {
@@ -20,6 +20,7 @@ export default function RootLayout({
         <OrderProvider> {/* Wrap the entire app with OrderProvider */}
           <Navbar />
           {children}
+          <Footer />
         </OrderProvider>
       </body>
     </html>

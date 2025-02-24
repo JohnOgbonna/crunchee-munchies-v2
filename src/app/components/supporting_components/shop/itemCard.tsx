@@ -14,7 +14,7 @@ interface ItemCardProps {
 
 const ItemCard: React.FC<ItemCardProps> = ({ item, link, index }) => {
     return (
-        <motion.a href={`/${link}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`} className="bg-[#f5e3c5] rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-[300px] flex flex-col items-center cursor-pointer justify-between p-4">
+        <Link href={`/${link}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`} className="bg-[#f5e3c5] rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105  flex flex-col items-center cursor-pointer justify-between p-4">
             <motion.div className="flex-1 flex items-center justify-center mb-2 w-full"
                 variants={delayedFadeInAnimationVariants}
                 initial="initial"
@@ -25,7 +25,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, link, index }) => {
                 <Image
                     src={item.heroImage}
                     alt={item.name}
-                    className="object-contain max-h-[300px] w-full transition-all duration-300 ease-in-out"
+                    className="object-contain h-[200px] w-full transition-all duration-300 ease-in-out"
                     width={0}
                     height={0}
                     style={{}}
@@ -46,7 +46,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, link, index }) => {
                 <motion.h2 className="text-xl font-semibold">{item.name}</motion.h2>
                 <p className="text-gray-700 line-clamp-2 hover:line-clamp-none">{item.description}</p>
             </motion.div>
-        </motion.a>
+        </Link>
     );
 };
 

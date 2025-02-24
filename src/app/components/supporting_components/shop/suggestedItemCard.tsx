@@ -27,14 +27,14 @@ const SuggestedItemCard = ({ item, index }: SuggestedItemCardProps) => {
                     <h3 className="text-lg font-semibold mb-2 p-2">{item.name}</h3>
 
                     {/* Item Image */}
-                    <div className="w-[90vw] sm:max-h-[280px] max-w-[400px] min-w-[300px] md:max-h-[300px] md:w-[400px] lg:w-[400px] flex justify-center items-center">
+                    <div className="w-[90vw] max-h-[250px] max-w-[400px] min-w-[300px] md:w-[400px] lg:w-[400px] flex justify-center items-center">
                         <Image
                             src={item.heroImage}
                             alt={item.name}
-                            className="max-w-[350px] max-h-full sm:h-[200px] md:h-[300px] object-contain rounded-lg md:max-h-[300px]"
+                            className="w-full max-w-[350px] max-h-full h-[200px]  object-contain rounded-lg md:max-h-[250px]"
                             width={0}
                             height={0}
-                            style ={ {} }
+                            style={{ }}
                             sizes="100vw"
                         />
                     </div>
