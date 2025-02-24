@@ -8,6 +8,8 @@ import OrderPanel from "../../supporting_components/shop/orderPanel";
 import Link from "next/link";
 import { MobileSubsections, DesktopSubsections } from "../../supporting_components/navBar/navSubsections";
 import CloseIcon from "../../supporting_components/icons/close";
+import { motion } from "framer-motion";
+import { delayedFadeInAnimationVariants } from "@/app/data/ui";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +22,14 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="md:bg-orange-200 text-slate-700 z-20 md:z-10">
+        <motion.nav className="md:bg-orange-200 text-slate-700 z-20 md:z-10 md:p-1 sticky top-0"
+            initial={{ y: -100, opacity: .75 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+                y: { duration: 0.3, ease: 'easeOut', delay: 0.25 },  // slide-down animation
+                opacity: { duration: 0.8, delay: 0.8 },  // Fade in after 0.8 seconds
+            }}
+        >
             <div className="md:flex md:justify-between max-w-[1440px] mx-auto">
                 <div className="flex justify-between bg-orange-200 p-2 max-w-[1400px]">
                     <Link href="/"><h1 className="font-bold cursor-pointer">Crunchee Munchies</h1></Link>
@@ -42,10 +51,16 @@ export default function Navbar() {
                         <CloseIcon className="md:hidden" size={28} />
                     </li>
 
-                    {Object.entries(navSections).map(([key, value]) => (
-                        <li key={key} className="cursor-pointer text-lg md:text-base relative group md:inline-block"
+                    {Object.entries(navSections).map(([key, value], index) => (
+                        <motion.li key={key} className="cursor-pointer text-lg md:text-base relative group md:inline-block"
                             onMouseEnter={() => setHoveredSection(key)}
-                            onMouseLeave={() => setHoveredSection(null)}>
+                            onMouseLeave={() => setHoveredSection(null)}
+                            variants={delayedFadeInAnimationVariants}
+                            initial="initial"
+                            whileInView={"animate"}
+                            custom={index}
+                            viewport={{ once: true }}
+                        >
                             <div className="flex items-center md:w-auto" onClick={() => setIsOpen(false)}>
                                 <Link href={`/${key}`} className="text-[1.3rem] md:text-[1rem]">{value}</Link>
                                 {navSubsections[key] && (
@@ -74,7 +89,7 @@ export default function Navbar() {
                                 subsections={navSubsections[key] as unknown as NavSubsections || {}}
                                 isHovered={hoveredSection === key}
                             />
-                        </li>
+                        </motion.li>
                     ))}
                     <li className="md:mr-2 lg:mr-4 sm:hidden">
                         <ShoppingCart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} hideOnSm={true} />
@@ -85,6 +100,6 @@ export default function Navbar() {
 
             {/* Order Panel */}
             <OrderPanel isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
-        </nav>
+        </motion.nav>
     );
 }

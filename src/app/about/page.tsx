@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { aboutUsContent } from '../data/aboutUsContent';
 import type { AboutUsSection, BasicListSection, BasicQuoteSection, HeroSection, TopicSection } from '../typesAndInterfaces/aboutTypes';
 import { delayedFadeInAnimationVariants } from '../data/ui';
+import Image from 'next/image';
 
 
 const AboutUs = () => {
@@ -78,7 +79,12 @@ const HeroSection = ({ section }: { section: HeroSection }) => (
                 whileInView={"visible"}
                 transition={{ duration: 0.4, delay: 1.2, ease: "easeInOut", x: { type: "spring", stiffness: 30 }, opacity: { duration: .8, delay: 0.2, ease: "easeInOut" } }}
             >
-                <img src={section.image} alt={section.title} />
+                <Image src={section.image} alt={section.title} 
+                 width={0}
+                 height={0}
+                 style ={ {width: "auto", height: "auto"} }
+                 sizes="100vw"
+                />
             </motion.div>
         </div>
     </motion.div>
@@ -119,10 +125,15 @@ const TopicSection = ({ section }: { section: TopicSection }) => (
                             viewport={{ once: true }}
                         >
                             <div className="w-[90vw] mx-auto sm:max-h-[280px] max-w-[400px] min-w-[300px] md:max-h-[300px] md:w-[400px] lg:w-[400px] flex justify-center items-center">
-                                <img
-                                    src={item.image}
+                                <Image
+                                    src={item.image as string}
                                     alt={key}
-                                    className="max-w-[350px] max-h-full sm:h-[200px] md:h-[200px] object-contain rounded-lg "
+                                    className="max-w-[350px] h-[200px] object-contain rounded-lg"
+                                    width={0}
+                                    height={0}
+                                    style ={ {width: "auto", height: "200px"} }
+                                    sizes="100vw"
+                                    objectFit='contain'
                                 />
                             </div>
                             <h3 className="text-xl font-semibold mt-4">{item.title}</h3>

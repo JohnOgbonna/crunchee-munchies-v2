@@ -10,8 +10,8 @@ const Shop: React.FC = () => {
             <h1 className="text-3xl font-bold mb-4 ">Shop</h1>
             <p className="mb-4">Browse our items!</p>
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 transition-all duration-300 ease-in-out">
-                {items.map((item) => (
-                    <ItemCard key={item.id} item={item} link={`shop/${links[item.id]}`} />
+                {items.map((item, index) => (
+                    <ItemCard key={item.id} item={item} index={index} link={`shop/${links[item.id]}`} />
                 ))}
             </div>
         </div>

@@ -2,6 +2,7 @@ import { Seller } from "@/app/typesAndInterfaces/whereToFindUsTypes";
 import Link from "next/link";
 import { motion } from "framer-motion"
 import { delayedFadeInAnimationVariants } from "@/app/data/ui";
+import Image from "next/image";
 
 export const PremiumSeller = ({ seller }: { seller: Seller }) => {
     return (
@@ -31,8 +32,16 @@ export const PremiumSeller = ({ seller }: { seller: Seller }) => {
                             custom={index}
                             viewport={{ once: true }}
                         >
-                            <img key={index} src={image} alt={seller.title} className="rounded-lg object-contain max-w-[450px] md:max-w-[500px] w-full mx-auto md:h-[400px] lg:max-w:[600px] lg:h-[500px] shadow-lg" />
+
+                            <Image key={index} src={image} alt={seller.title} className="rounded-lg object-contain max-w-[450px] md:max-w-[500px] w-full mx-auto md:h-[400px] lg:max-w:[600px] lg:h-[500px] shadow-lg"
+                                width={0}
+                                height={0}
+                                style={{}}
+                                sizes="100vw"
+                            />
+
                         </motion.div>
+
                     ))}
                 </div>
             </div>
@@ -81,17 +90,23 @@ export const SupplyToSeller = ({ sellers }: { sellers: Record<string, Seller> })
                                 Find them online here!
                             </Link>
                         </div>
-                        <div className="flex gap-4 overflow-x-auto mt-2 rounded-xl">
+                        <div className="flex gap-4 overflow-x-auto mt-2 rounded-xl justify-center">
                             {seller.images.map((image, index) => (
                                 <motion.div
-                                key={index} 
-                                variants={delayedFadeInAnimationVariants}
-                                initial="initial"
-                                whileInView={"animate"}
-                                custom={index}
-                                viewport={{ once: true }}
+                                    key={index}
+                                    variants={delayedFadeInAnimationVariants}
+                                    initial="initial"
+                                    whileInView={"animate"}
+                                    custom={index}
+                                    viewport={{ once: true }}
+                                    className="rounded-lg"
                                 >
-                                    <img src={image} alt={seller.title} width={200} height={150} className=" object-contain max-w-[450px] md:max-w-[500px] w-full md:h-[400px] shadow-lg" />
+                                    <Image src={image} alt={seller.title} className=" object-contain max-w-[450px] md:max-w-[500px] w-full md:h-[400px] shadow-lg" 
+                                      width={0} 
+                                      height={0}
+                                      style={{}}
+                                      sizes="100vw"
+                                    />
                                 </motion.div>
                             ))}
                         </div>

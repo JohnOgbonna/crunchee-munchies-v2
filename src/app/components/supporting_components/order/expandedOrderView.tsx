@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { SetStateAction } from "react";
 import CustomerDetailsForm from "./customerDetailsForm";
+import Image from "next/image";
 
 interface ExpandedOrderViewProps {
   selectedItemId: itemId;
@@ -58,7 +59,12 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, s
 
           return (
             <li key={variantId} className="flex items-center justify-between border-b pb-2">
-              <img src={variation.url || selectedItem.heroImage} alt={variation.name} className="w-16 h-16 object-cover rounded" />
+              <Image src={variation.url || selectedItem.heroImage} alt={variation.name} className="w-16 h-16 object-cover rounded"
+                width={0}
+                height={0}
+                style ={{}}
+                sizes="100vw"
+              />
               <div className="flex items-center gap-4 sm:text-sm">
                 <p className="font-semibold">{variation.name}</p>
                 <p className="font-semibold text-gray-700">{`$${variation.price.toFixed(2)} x ${orderItem.quantity}`}</p>
