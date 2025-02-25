@@ -17,7 +17,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const { orders } = useOrderContext();
 
   const selectedItem: item | undefined = itemDataMap[item as keyof typeof itemDataMap];
-  const { id, size_variants, name, description } = selectedItem;
+  const { id, size_variants, name, description } = selectedItem?? {};
   const selectedVariantId = searchParams.get("variant") || "";
   const [selectedVariation, setSelectedVariation] = useState<itemSizeVariation | null>(null);
   const [_quantity, setQuantity] = useState(0);

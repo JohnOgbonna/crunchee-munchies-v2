@@ -7,6 +7,7 @@ import { useOrderContext } from "@/app/context/OrderContext";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
+import { shopLinks } from "@/app/data/items";
 
 interface SelectedVariationDisplayProps {
   selectedVariation: itemSizeVariation;
@@ -148,7 +149,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
           </button>
           {orders[selectedVariation.parentId] && (
             <Link
-              href={`order?item=${selectedVariation.parentId}`}
+              href={`/order?item=${shopLinks[selectedVariation.parentId]}`}
               className="text-md font-semibold text-red-600 hover:underline hover:red-800 mt-4 text-center hover:scale-105 transition-all duration-300"
             >
               Complete Order
