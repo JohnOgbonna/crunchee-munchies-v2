@@ -3,7 +3,6 @@ import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { shopLinks, itemDataMap } from "@/app/data/items";
 import CloseIcon from "../icons/close";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { SetStateAction } from "react";
 import CustomerDetailsForm from "./customerDetailsForm";
@@ -24,10 +23,10 @@ interface ExpandedOrderViewProps {
   handleClose: () => void;
 }
 
-const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, setSelectedItem, orders, handleClose }) => {
+const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, orders, handleClose }) => {
   const { clearItemVariation } = useOrderContext();
   const selectedOrder = orders[selectedItemId];
-  const searchParams = useSearchParams();
+
 
   if (!selectedOrder) return null;
 
@@ -40,7 +39,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, s
   let orderTotal = 0;
 
   return (
-    <div className="p-4 md:border md:shadow-md w-full overflow-y-scroll">
+    <div className="p-4 sm:pt-[60px] md:border md:shadow-md w-full sm:overflow-y-scroll">
       <div className="flex gap-4 mb-4 items-center">
         {/* Back Button */}
         <button

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useOrderContext } from "@/app/context/OrderContext";
 import { itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 
 interface ItemVariationSelectorProps {
@@ -11,7 +10,7 @@ interface ItemVariationSelectorProps {
     selectedVariantId: string;
 }
 
-const ItemVariationSelector: React.FC<ItemVariationSelectorProps> = ({ itemId, variations, selectedVariantId }) => {
+const ItemVariationSelector: React.FC<ItemVariationSelectorProps> = ({ variations, selectedVariantId }) => {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();

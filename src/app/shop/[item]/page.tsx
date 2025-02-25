@@ -6,7 +6,7 @@ import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { itemDataMap, shopLinks } from "@/app/data/items";
 import ItemVariationSelector from "@/app/components/supporting_components/shop/itemVariationSelector";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import SuggestedItems from "@/app/components/supporting_components/shop/suggestedItems";
 import SelectedVariationDisplay from "@/app/components/supporting_components/shop/selectedVariationDisplay";
 import Link from "next/link";
@@ -14,15 +14,13 @@ import OrderSummary from "@/app/components/supporting_components/order/orderSumm
 
 const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
   const searchParams = useSearchParams();
-  const { orders, addOrder } = useOrderContext();
+  const { orders } = useOrderContext();
 
   const selectedItem: item | undefined = itemDataMap[item as keyof typeof itemDataMap];
-  if (!selectedItem) return <div className="text-center">Item not found</div>;
-
   const { id, size_variants, name, description } = selectedItem;
   const selectedVariantId = searchParams.get("variant") || "";
   const [selectedVariation, setSelectedVariation] = useState<itemSizeVariation | null>(null);
-  const [quantity, setQuantity] = useState(0);
+  const [_quantity, setQuantity] = useState(0);
 
 
   useEffect(() => {
@@ -37,9 +35,9 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
       const minQuantity = selectedVariation.minimumQuantity || 0;
       setQuantity(existingQuantity ?? minQuantity);
     }
-  }, [selectedVariation, orders]);
+  }, [selectedVariation, orders, id]);
 
-
+  if (!selectedItem) return <div className="text-center">Item not found</div>;
   return (
     <div className="p-4 text-slate-700 flex flex-col max-w-[1440px] mx-auto">
       <Toaster richColors position="top-center" closeButton={true} />

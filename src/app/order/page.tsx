@@ -71,7 +71,7 @@ const OrderPage = () => {
 
                 {/* Expanded Order View */}
                 <div
-                    className={`fixed top-0 left-0 w-full h-full bg-white md:relative md:w-2/3 lg:ml-4 transition-transform duration-[700ms] ease-in-out md:max-w-[600px] overflow-y-scroll
+                    className={`fixed top-0 left-0 w-full h-full bg-white md:relative md:w-2/3 lg:ml-4 transition-transform duration-[700ms] ease-in-out md:max-w-[600px] overflow-y-scroll scrollbar-hide
                         ${selectedItem ? "translate-x-0 opacity-100 pointer-events-auto" : "translate-x-full opacity-0 pointer-events-none"}
                         ${isExiting ? "translate-x-[130%]" : ""}`}
                 >

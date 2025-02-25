@@ -1,6 +1,5 @@
 'use client'
 import { useOrderContext } from "@/app/context/OrderContext";
-import { Dispatch, SetStateAction, useState } from "react";
 
 export interface socialMediaIconProps {
     size: number

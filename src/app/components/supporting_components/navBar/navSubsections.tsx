@@ -10,7 +10,6 @@ interface SubsectionsProps {
 type NavSubsections = Record<string, Record<string, { link: string }>>;
 
 export const MobileSubsections: React.FC<SubsectionsProps> = ({
-  sectionKey,
   subsections,
   isExpanded,
   onClose,

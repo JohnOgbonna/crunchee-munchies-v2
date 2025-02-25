@@ -33,9 +33,6 @@ const CustomerDetailsForm = () => {
         resolver: zodResolver(formSchema),
     });
 
-    // Watch the needsDelivery field for conditional rendering
-    const needsDelivery = watch('needsDelivery');
-
     const onSubmit = (data: FormDataType) => {
         toast.success('Form submitted successfully!');
         console.log('Submitted data:', data);

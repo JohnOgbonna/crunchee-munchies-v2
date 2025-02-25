@@ -3,7 +3,6 @@
 import { connectContent } from "@/app/data/connectContent";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { use } from "react";
 
 export default function SocialMediaSection() {
     return (

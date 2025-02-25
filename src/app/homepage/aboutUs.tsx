@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from "framer-motion"
-import Link from "next/link"
 
 export default function AboutUsHome() {
     return (
@@ -27,9 +26,9 @@ export default function AboutUsHome() {
                     transition={{ duration: 0.5, delay: 0.9, ease: "easeInOut", x: { type: "spring", stiffness: 30 }, opacity: { duration: .8, delay: 0.2, ease: "easeInOut" } }}
 
                 >
-                    <h2 className="font-bold mb-2 italic w-full max-w-[600px]">We're a Family Owned Company!</h2>
+                    <h2 className="font-bold mb-2 italic w-full max-w-[600px]">{"We're a Family Owned Company!"}</h2>
                     <motion.p className="w-full max-w-[600px]"
-                    >We beleive we make the best Chin-Chin in the world and we want to share it with you- And then with the world! With our special recipie that we refined to perfection, we've recieved rave customer reviews. We're based in Calgary, Alberta and we're expanding our market!</motion.p>
+                    >{"We beleive we make the best Chin-Chin in the world and we want to share it with you- And then with the world! With our special recipie that we refined to perfection, we've recieved rave customer reviews. We're based in Calgary, Alberta and we're expanding our market!"}</motion.p>
                 </motion.div>
                 <motion.a href="/about" className="hover:underline"
                      variants={{

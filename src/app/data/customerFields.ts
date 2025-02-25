@@ -7,7 +7,7 @@ export interface customerField {
     disclaimer?: string[],
     dependsOn?: string,
     checkedByDefault?: boolean,
-    listOptions?: { [key: string]: any };
+    listOptions?: { [key: string]: listOption };
 }
 
 export interface listOption {

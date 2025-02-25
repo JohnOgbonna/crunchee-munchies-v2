@@ -10,8 +10,8 @@ export default function ContactFormSection() {
         handleSubmit,
         formState: { errors },
     } = useForm();
-
-    const onSubmit = (data: any) => {
+    
+    const onSubmit = (data: typeof connectContent.contactForm.formFields) => {
         console.log("Form submitted:", data);
         toast.success("Message sent successfully!");
     };
@@ -36,9 +36,8 @@ export default function ContactFormSection() {
                 {Object.values(connectContent.contactForm.formFields).map((field) => (
                     <div
                         key={field.id}
-                        className={`flex flex-col w-full sm:max-w-[450px] ${
-                            field.inputType !== "textarea" ? "md:w-[45%]" : "md:max-w-[600px]"
-                        }`}
+                        className={`flex flex-col w-full sm:max-w-[450px] ${field.inputType !== "textarea" ? "md:w-[45%]" : "md:max-w-[600px]"
+                            }`}
                     >
                         <label className="font-medium" htmlFor={field.id}>
                             {field.display}

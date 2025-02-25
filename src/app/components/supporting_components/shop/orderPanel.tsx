@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {  useCallback, useEffect, useRef } from "react";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../order/orderSummary";
@@ -12,9 +12,9 @@ export default function OrderPanel({ isCartOpen, setIsCartOpen }: OrderPanelProp
     const { orders } = useOrderContext();
     const panelRef = useRef<HTMLDivElement | null>(null);
 
-    const closeCart = () => {
+    const closeCart = useCallback   ( () => {
         setIsCartOpen(false);
-    };
+    }, [setIsCartOpen]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -35,7 +35,7 @@ export default function OrderPanel({ isCartOpen, setIsCartOpen }: OrderPanelProp
             document.body.style.overflow = "";
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isCartOpen]);
+    }, [isCartOpen, closeCart]);
 
     return (
         <div className={`fixed inset-0 ${isCartOpen ? "visible" : "invisible"} flex justify-end z-20`}>
@@ -55,7 +55,7 @@ export default function OrderPanel({ isCartOpen, setIsCartOpen }: OrderPanelProp
                 </div>
                 <div className="p-4 space-y-4 overflow-auto h-full">
                     {Object.keys(orders).length > 0 ? (
-                        Object.entries(orders).map(([orderId, _]) => (
+                        Object.entries(orders).map(([orderId]) => (
                             <OrderSummary key={orderId} selectedItemId={orderId as itemId} orders={orders} isNav closeCart={closeCart} />
                         ))
                     ) : (
