@@ -18,7 +18,7 @@ const SuggestedItems = ({ items }: { items: item[] }) => {
 
             >More From Our Shop</motion.h3>
             <div
-                className="flex space-x-4 overflow-x-scroll scrollbar-hide w-full md:space-x-8"
+                className="flex space-x-4 overflow-x-scroll scrollbar-hidden w-full md:space-x-8"
             >
                 {items.map((item, index) => (
                     <SuggestedItemCard key={item.id} item={item} index={index} />
