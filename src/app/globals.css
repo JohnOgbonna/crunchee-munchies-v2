@@ -27,6 +27,9 @@ body {
   background: var(--background);
   font-family: 'Montserrat1';
 }
+html{
+  overflow-x: hidden;
+}
 
 @layer utilities {
   .text-balance {
