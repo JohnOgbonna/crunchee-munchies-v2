@@ -4,10 +4,9 @@ import { FormDataType } from "../components/supporting_components/order/customer
 import { sendOrder } from "../typesAndInterfaces/orderTypes";
 
 
-const LAMBDA_ENDPOINT = process.env.LAMBDA_ORDER_URL as string; // Lambda function URL
+const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_ORDER_URL as string; // Lambda function URL
 
 export async function submitOrder(customer: FormDataType, order: sendOrder) {
-    console.log(LAMBDA_ENDPOINT)
     try {
         // Ensure there is a valid order
         if (!order || Object.keys(order).length === 0) {

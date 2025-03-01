@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { InstagramIFrame } from "../components/supporting_components/connect/instagramiFrame";
 import TikTokEmbed from "../components/supporting_components/connect/tikTokiFrame";
 import EmailIcon from "../components/supporting_components/icons/email";
@@ -90,3 +91,22 @@ export const connectContent = {
         icon: EmailIcon
     }
 }
+
+export const contactFormSchema = z.object({
+    firstName: z.string().min(3, 'First name must be at least 3 characters'),
+    lastName: z.string().optional(),
+    email: z.string().email('Invalid email format'),
+    phone: z.string().optional().refine((val) => val?.match(/^\+?[0-9]{10,14}$/) || !val, {
+        message: 'Invalid phone number format',
+    }),
+    message: z.string().min(3, 'Message must be at least 3 characters'),
+    preferedResponseType: z.enum(['email', 'phone']),
+}).refine((data) => {
+    return data.preferedResponseType === 'phone' ? !!data.phone : true;
+}, {
+    message: 'Phone number is required if preferred contact method is phone',
+    path: ['phone'],
+});
+
+// Define the TypeScript type for formData based on Zod schema
+export type ContactFormData = z.infer<typeof contactFormSchema>;
