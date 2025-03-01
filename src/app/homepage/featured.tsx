@@ -7,15 +7,15 @@ import Link from "next/link"
 import { featuredItem } from "../typesAndInterfaces/orderTypes"
 const featuredSections: featuredItem[] = [
     {
-        name: 'Chin-Chin',
+        name: 'Chin Chin',
         description: 'A Staple African Snack. Perfected, Order Now!',
-        link: '/',
+        link: '/shop/chin_chin_standard?variant=ch-1-750',
         image: chinChin750Group
     },
     {
-        name: 'Chin-Chin Wholesale',
+        name: 'Chin Chin Wholesale',
         description: 'We sell in bulk! Ideal for resale or large events!',
-        link: '/',
+        link: '/shop/chin_chin_wholesale?variant=ch-by-kg',
         image: chinChinBulkOrder
     },
 ]

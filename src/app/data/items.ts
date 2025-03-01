@@ -18,14 +18,15 @@ export const chinChin1200: itemSizeVariation = {
     price: 31.99,
     description: '1.2kg Pack. For those who need just a little bit more!',
     type: itemType.chinChin,
-    maximumQuantity: 30
+    maximumQuantity: 30,
+    url: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/chin-chin/chin-chin1200g.png'
 }
 
 export const chinChin2500: itemSizeVariation = {
     parentId: itemId.chin_chin_standard,
     id: 'ch-1-2500',
     name: '2.5kg',
-    price: 51.99,
+    price: 54.99,
     description: '2.5kg Pack. For when you simply just need to stock up!',
     type: itemType.chinChin,
     maximumQuantity: 30,

@@ -7,11 +7,15 @@ import OrderSummary from "../components/supporting_components/order/orderSummary
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { shopLinks } from "../data/items";
+import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
+import OrderConfirmation from "../components/supporting_components/order/OrderConfirmation";
+
 
 const OrderPageContent = () => {
     const { orders } = useOrderContext();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const { formSubmitted, customerData, setFormSubmitted, setCustomerData } = useOrderSubmitContext();
     const router = useRouter();
 
     const [selectedItem, setSelectedItem] = useState<itemId | null>(null);
@@ -43,12 +47,13 @@ const OrderPageContent = () => {
 
     const handleClose = () => {
         setIsExiting(true);
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("item");
+        router.replace(`${pathname}?${params.toString()}`);
         setTimeout(() => {
             setSelectedItem(null);
             setIsExiting(false);
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete("item");
-            router.replace(`${pathname}?${params.toString()}`);
+
         }, 500);
     };
 
@@ -61,24 +66,27 @@ const OrderPageContent = () => {
         router.replace(`${pathname}?${params.toString()}`);
     };
 
+    const handleSummaryClose = () => {
+        setFormSubmitted(false);
+        setCustomerData({ name: '', email: '' });
+    }
     return (
         <div className="p-4 mx-auto max-w-[1440px]">
+            {formSubmitted && customerData && <OrderConfirmation handleClose={handleSummaryClose} customerData={customerData} />}
             <h2 className="text-xl font-semibold mb-4 text-slate-700">
                 Select Order to Complete:
             </h2>
 
             <div
-                className={`relative flex gap-4 transition-all duration-500 ease-in-out md:justify-center ${
-                    selectedItem ? "md:flex-row" : ""
-                }`}
+                className={`relative flex gap-4 transition-all duration-500 ease-in-out md:justify-center ${selectedItem ? "md:flex-row" : ""
+                    }`}
             >
                 {/* Order Summary List */}
                 <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden md:min-w-[355px] lg:min-w-[385px] flex flex-col gap-4 ${
-                        selectedItem ? " p-0 m-0" : " md:w-1/3"
-                    }`}
+                    className={`transition-all duration-500 ease-in-out overflow-hidden md:min-w-[355px] lg:min-w-[385px] flex flex-col gap-4 ${selectedItem ? " p-0 m-0" : " md:w-1/3"
+                        }`}
                 >
-                    {Object.keys(orders).map((id) => (
+                    {Object.keys(orders).length > 0 ? Object.keys(orders).map((id) => (
                         <div key={id} onClick={() => handleItemSelection(id as itemId)}>
                             <OrderSummary
                                 selectedItemId={id as itemId}
@@ -87,7 +95,14 @@ const OrderPageContent = () => {
                                 isSelected={id === selectedItem}
                             />
                         </div>
-                    ))}
+                    )) : (
+                        <div className="flex flex-col gap-4 font-bold">
+                            <p className="text-slate-700">No orders found.</p>
+                            <a href="/shop" className="text-blue-600 hover:scale-105 transition-all ease-out duration-400 underline">
+                                Shop Now
+                            </a>
+                        </div>
+                    )}
                 </div>
 
                 {/* Expanded Order View */}
@@ -96,24 +111,26 @@ const OrderPageContent = () => {
                     ${selectedItem ? "translate-x-0 opacity-100 scale-100" : "translate-x-full opacity-0 scale-95"} 
                     ${isExiting ? "translate-x-[130%] opacity-0 scale-90" : ""}`}
                 >
-                    {selectedItem && (
+                    {selectedItem && orders[selectedItem] &&
                         <ExpandedOrderView
-                            selectedItemId={selectedItem}
+                            selectedItemId={selectedItem as itemId}
                             orders={orders}
                             handleClose={handleClose}
-                            setSelectedItem={setSelectedItem}
                         />
-                    )}
+                    }
                 </div>
             </div>
         </div>
     );
 };
 
+
 const OrderPage = () => {
     return (
         <Suspense fallback={<div>Loading Order Page...</div>}>
-            <OrderPageContent />
+            <OrderSubmitProvider> {/* Wrap the component in OrderProvider instead of manually providing values */}
+                <OrderPageContent />
+            </OrderSubmitProvider>
         </Suspense>
     );
 };

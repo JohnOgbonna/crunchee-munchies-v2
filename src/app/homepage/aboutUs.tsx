@@ -30,7 +30,7 @@ export default function AboutUsHome() {
                     <motion.p className="w-full max-w-[600px]"
                     >{"We beleive we make the best Chin-Chin in the world and we want to share it with you- And then with the world! With our special recipie that we refined to perfection, we've recieved rave customer reviews. We're based in Calgary, Alberta and we're expanding our market!"}</motion.p>
                 </motion.div>
-                <motion.a href="/about" className="hover:underline"
+                <motion.a href="/about" className="hover:underline text-blue-600 cursor-pointer italic hover:scale-105 transition-all duration-400 font-bold"
                      variants={{
                         hidden: { opacity: .01, y: 20 },
                         visible: { opacity: 1, y: 0 }

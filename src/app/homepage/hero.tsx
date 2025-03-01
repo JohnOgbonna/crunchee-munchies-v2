@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { chinChin750Hero as heroImage } from "../data/images";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
     return (
@@ -17,15 +18,17 @@ export default function Hero() {
                     whileInView={"visible"}
                     transition={{ duration: 0.4, delay: .5, ease: "easeInOut", x: { type: "spring", stiffness: 30 }, opacity: { duration: .8, delay: 0.2, ease: "easeInOut" } }}
                 >
-                    <Image
-                        src={heroImage}
-                        alt="chinChinHero"
-                        className={`h-[50vh] min-h-[300px] max-h-[400px]`}
-                        width={0}
-                        height={0}
-                        style={{ width: "auto", height: "auto" }}
-                        sizes="100vw"
-                    />
+                    <Link href="/shop">
+                        <Image
+                            src={heroImage}
+                            alt="chinChinHero"
+                            className={`h-[50vh] min-h-[300px] max-h-[400px] cursor-pointer`}
+                            width={0}
+                            height={0}
+                            style={{ width: "auto", height: "auto" }}
+                            sizes="100vw"
+                        />
+                    </Link>
                 </motion.div>
                 <motion.h1 className={`text-[1.1rem] md:text-[1.3rem] lg:text-[1.6rem]`}
                     variants={{

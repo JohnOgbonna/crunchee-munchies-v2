@@ -6,7 +6,7 @@ import { itemId, OrderContextType, orderVariantion } from "../typesAndInterfaces
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
-    const [orders, setOrders] = useState<OrderContextType["orders"]>({});
+    const [orders, setOrders] = useState<OrderContextType["orders"] | {}>({});
 
     // Load orders from local storage on mount
     useEffect(() => {
@@ -37,7 +37,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             if (variant.quantity > 0) { // Ensure we only add if quantity is > 0
                 newOrders[id].variations[variant.variantId] = { quantity: variant.quantity };
             }
-            
+
             if (variant.quantity === 0) {
                 delete newOrders[id].variations[variant.variantId];
                 if (Object.keys(newOrders[id].variations).length === 0) {
@@ -119,7 +119,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     return (
         <OrderContext.Provider
             value={{
-                orders,
+                orders: orders as OrderContextType["orders"],
                 addOrder,
                 removeOrder,
                 clearOrders,

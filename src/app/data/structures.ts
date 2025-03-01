@@ -28,7 +28,7 @@ export const navSubsections: NavSubsections = {
             link: 'shop/chin_chin_event_order',
         },
         [itemDataMap.chin_chin_bundle.name]: {
-            link: 'shop/chin_chin_bundles',
+            link: 'shop/chin_chin_bundle',
         },
     },
 }

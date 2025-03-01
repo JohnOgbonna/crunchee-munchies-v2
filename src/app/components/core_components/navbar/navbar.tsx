@@ -39,7 +39,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {isOpen && <div className="fixed inset-0 bg-black bg-opacity-50 md:hidden" onClick={() => setIsOpen(false)}></div>}
+                {isOpen && <div className="absolute inset-0 bg-black bg-opacity-50 md:hidden" onClick={() => setIsOpen(false)}></div>}
 
                 <ul className={`
                     flex flex-col z-30 md:z-10 items-stretch gap-2 p-2 bg-orange-200 fixed top-0 right-0 h-full transition-transform duration-700 md:static md:flex-row md:gap-4 md:items-center md:text-[.9rem]

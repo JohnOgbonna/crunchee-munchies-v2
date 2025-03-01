@@ -24,7 +24,7 @@ interface OrderSummaryProps {
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isNav = false, closeCart, isOrderPage, isSelected }) => {
     const selectedOrder = orders[selectedItemId];
-    const { clearItemVariation } = useOrderContext();
+    const { clearItemVariation, removeOrder } = useOrderContext();
     if (!selectedOrder) return null;
 
     const variations: { [variantId: string]: itemSizeVariation } = {};
@@ -77,10 +77,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
                 )}
             </ul>
             {isNav &&
-                <Link href={`/order?item=${shopLinks[selectedItemId]}`} className="text-md block cursor-pointer font-semibold mt-3 text-center text-red-600 hover:text-red-800 hover:underline w-full"
+                <Link href={`/order?item=${shopLinks[selectedItemId]}`} className="text-md block cursor-pointer font-semibold mt-2 text-center text-red-600 hover:text-red-800 hover:underline w-full"
                 onClick={() => handleClose()}
                 >Complete Order</Link>
             }
+            <p className="font-bold text-sm text-gray-600 text-center mt-1 hover:underline cursor-pointer hover:text-gray-800 hover:scale-105 transition-all duration-300"
+            onClick={() => removeOrder(selectedItemId)}
+            >Remove</p>
         </div>
     );
 };

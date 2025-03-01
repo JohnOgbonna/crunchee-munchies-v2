@@ -19,7 +19,7 @@ const SuggestedItemCard = ({ item, index }: SuggestedItemCardProps) => {
             whileInView={"animate"}
             custom={index}
             viewport={{ once: true }}
-            className="pb-20"
+            
         >
             <Link href={`/shop/${shopLinks[item.id]}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`}
                 className="relative z-0">

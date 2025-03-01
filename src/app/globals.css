@@ -26,6 +26,8 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Montserrat1';
+  margin: 0;
+  padding: 0;
 }
 html{
   overflow-x: hidden;
@@ -37,3 +39,8 @@ html{
   }
 }
 
+.ast-mobile-header-wrap .ast-above-header.ast-above-header-bar {
+
+  margin-right: 0 !important;
+  
+  }

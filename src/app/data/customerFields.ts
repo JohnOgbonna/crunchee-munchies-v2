@@ -71,7 +71,7 @@ export const customerFields: { [key: string]: customerField } = {
     },
     needsDelivery: {
         id: 'needsDelivery',
-        display: 'Do you require delivery?',
+        display: 'Do you require delivery? Leave unchecked for pickup in Northwest Calgary.',
         required: true,
         inputType: 'checkbox',
         disclaimer: ['Free pickup in Northwest Calgary, Alberta.', 'If you live outside of Calgary, we will contact you to confirm shipping arrangements. By continuing, you acknowledge that you are responsible for any shipping fees.'],
@@ -105,5 +105,4 @@ export const customerFields: { [key: string]: customerField } = {
         inputType: 'text',
         dependsOn: 'needsDelivery',
     },
-    
 }

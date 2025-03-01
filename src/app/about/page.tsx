@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 const AboutUs = () => {
     return (
-        <div className={`mx-auto text-slate-700 bg-[#f5e3c5]`}>
+        <div className={`mx-auto text-slate-700 bg-[#f5e3c5] max-w-[1440px]`}>
             <div className={``}>
                 <motion.h1 className="text-3xl font-bold py-4 pl-4 max-w-[1440px] mx-auto"
                     variants={{
