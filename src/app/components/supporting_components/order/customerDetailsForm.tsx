@@ -64,9 +64,11 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
         toast.success("Order submitted successfully!");
     };
 
-    // ✅ Clear the form properly after successful submission
+    // ✅ Clear the form properly after successful submissions
     const onSubmit = async (data: FormDataType) => {
         const order = { item, ...orders[item] };
+        const LAMBDA_ENDPOINT = process.env.LAMBDA_ORDER_URL as string; // Lambda function URL
+        console.log(LAMBDA_ENDPOINT)
         try {
             const response = await submitOrder(data, order);
 
