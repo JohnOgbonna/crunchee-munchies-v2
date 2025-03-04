@@ -1,34 +1,29 @@
 'use server';
 
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { ContactFormData, contactFormSchema } from '../data/connectContent';
+import { formData } from "../data/connectContent";
 
+const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_MESSAGE_URL as string;
+const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string;
 
-
-export async function sendMessage(formData: ContactFormData) {
+export async function sendMessage(data: formData): Promise<{ error?: string; message?: string }> {
     try {
-        // Validate form data using Zod
-        const validatedData = contactFormSchema.parse(formData);
-
-        // Send data to AWS Lambda function
-        const response = await fetch(process.env.LAMBDA_CONTACT_URL as string, {
-            method: 'POST',
+        const response = await fetch(LAMBDA_ENDPOINT as string, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
+                "X-Secret-Access-Key": SECRET_ACCESS_KEY,
             },
-            body: JSON.stringify(validatedData),
+            body: JSON.stringify(data),
         });
-
         if (!response.ok) {
             const errorText = await response.text();
-            console.error(`Lambda function error: ${errorText}`);
-            return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+            throw new Error(`Server error: ${errorText}`);
         }
+        return await response.json();
 
-        return NextResponse.json({ message: 'Message sent successfully!' }, { status: 200 });
     } catch (error) {
-        console.error('Error processing contact form:', error);
-        return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
+        console.error("Error sending customer inquiry:", error);
+        return { error: "Failed to send message. Please try again." };
     }
 }
+

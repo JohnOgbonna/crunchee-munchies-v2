@@ -51,6 +51,10 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+            {/* Send us a message */}
+            <div className="text-center mt-8 text-lg font-semibold cursor-pointer hover:underline hover:scale-105 transition-all ease-out duration-300">
+                <Link href="/connect#contact_message" className="hover:underline">Send Us a Message</Link>
+            </div>
 
             {/* Copyright */}
             <div className="text-center text-sm mt-8 border-t border-opacity-50 pt-4">

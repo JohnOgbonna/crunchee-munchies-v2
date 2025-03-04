@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface customerField {
     id: string,
     display: string,
@@ -12,6 +14,7 @@ export interface customerField {
 
 export interface listOption {
     id: string;
+    value: string;
     display: string;
     dependsOn?: string;
     checkedByDefault?: boolean;
@@ -25,7 +28,6 @@ export type preferedResponseTypeField = {
     listOptions: { [key: string]: listOption};
 };
 
-
 export interface CustomerFormData {
     firstName: string;
     lastName: string;
@@ -38,6 +40,7 @@ export interface CustomerFormData {
     province?: string;
     postalZipCode?: string;
 }
+
 export const customerFields: { [key: string]: customerField } = {
     firstName: {
         id: 'firstName',
@@ -106,3 +109,20 @@ export const customerFields: { [key: string]: customerField } = {
         dependsOn: 'needsDelivery',
     },
 }
+
+// 🔹 Define Schema with Zod
+export const formSchema = z.object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Invalid email format"),
+    phone: z.string().min(10, "Phone number is required"),
+    notes: z.string().optional(),
+    needsDelivery: z.boolean(),
+    streetAddress: z.string().optional(),
+    city: z.string().optional(),
+    province: z.string().optional(),
+    postalZipCode: z.string().optional(),
+});
+
+// 🔹 Infer Type from Schema
+export type FormDataType = z.infer<typeof formSchema>;

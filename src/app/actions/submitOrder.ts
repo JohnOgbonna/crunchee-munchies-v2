@@ -1,10 +1,11 @@
 "use server";
 
-import { FormDataType } from "../components/supporting_components/order/customerDetailsForm";
+import { FormDataType } from "../data/customerFields";
 import { sendOrder } from "../typesAndInterfaces/orderTypes";
 
 
 const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_ORDER_URL as string; // Lambda function URL
+const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string; // access key
 
 export async function submitOrder(customer: FormDataType, order: sendOrder) {
     try {
@@ -31,6 +32,7 @@ export async function submitOrder(customer: FormDataType, order: sendOrder) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "X-Secret-Access-Key": SECRET_ACCESS_KEY,
             },
             body: JSON.stringify(payload),
         });
