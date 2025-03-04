@@ -1,7 +1,12 @@
-import { useForm } from "react-hook-form";
+'use client';
+
+import { set, useForm } from "react-hook-form";
 import { toast, Toaster } from "sonner";
-import { connectContent, ContactFormData } from "@/app/data/connectContent";
+import { connectContent, formData } from "@/app/data/connectContent";
 import { sendMessage } from "@/app/actions/sendMessage";
+import { BaseSyntheticEvent, useState } from "react";
+import Confirmation from "../confirmation";
+import SuspenseLoader from "../suspenseLoader";
 
 const commonFieldStyles = `focus:outline-none focus:ring-none focus:border-2 focus:border-blue-500`;
 
@@ -11,37 +16,60 @@ export default function ContactFormSection() {
         handleSubmit,
         watch,
         formState: { errors },
+        reset
     } = useForm();
 
     const preferredContact = watch("preferedResponseType"); // Watch radio selection
+    const [messageSubmitted, setMessageSubmitted] = useState(false);
+    const [customerData, setCustomerData] = useState<{ name: string, email: string }>({ name: '', email: '' });
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit = async (data: typeof connectContent.contactForm.formFields) => {
-    const formData: ContactFormData
-     = {
-        message: data.message.display,
-        preferedResponseType: data.preferedResponseType.listOptions?.email.checkedByDefault ? "email" : "phone",
-        firstName: data.firstName.display,
-        email: data.email.display,
-        lastName: data.lastName ? data.lastName.display : undefined,
-        phone: data.phone ? data.phone.display : undefined,
+
+    const handleSummaryClose = () => {
+        setMessageSubmitted(false);
+        setCustomerData({ name: '', email: '' });
+    }
+
+    const onSubmit = async (data: Record<string, string>, e?: BaseSyntheticEvent) => {
+        e?.preventDefault();
+        setIsLoading(true);
+        const formData: formData = {
+            message: data.message,
+            preferedResponseType: data.preferedResponseType as formData["preferedResponseType"], // Directly use the selected value
+            firstName: data.firstName,
+            email: data.email,
+            lastName: data.lastName || undefined,
+            phone: data.phone || undefined, // Ensure phone is only included when provided
+        };
+        try {
+            const response = await sendMessage(formData);
+    
+            if (!response) {
+                throw new Error("No response from server");
+            }
+    
+            if (response.error) {
+                toast.error(response.error.toString());
+            } else if (response.message) {
+                setMessageSubmitted(true);
+                setCustomerData({ name: formData.firstName, email: formData.email });
+                reset();
+            } else {
+                throw new Error("Unexpected response format.");
+            }
+        } catch (error) {
+            console.error("Message submission error:", error);
+            toast.error("Failed to send message. Please try again.");
+        } finally{
+            setIsLoading(false);
+        }
     };
 
-    const response = await sendMessage(formData);
-    
-    if ('error' in response) {
-        toast.error(response.error as unknown as string);
-    } else if ('message' in response) {
-        toast.success(response.message as unknown as string);
-    } else {
-        // Handle the case where neither 'error' nor 'message' exists
-        toast.error('An unknown error occurred.');
-    }
-};
-    
-
     return (
-        <section className="max-w-[800px] mx-auto pb-11">
+        <section className="max-w-[800px] mx-auto pb-11" id = "contact_message">
             <Toaster richColors position="top-center" closeButton={true} />
+            <SuspenseLoader isLoading={isLoading} type = "message" />    
+           { messageSubmitted && customerData.name && <Confirmation type="message" customerData={{ name: "", email: "" }} handleClose={handleSummaryClose} />}
             <h2 className="text-2xl font-bold text-center mb-4 underline">
                 {connectContent.contactForm.header}
             </h2>
@@ -70,7 +98,7 @@ export default function ContactFormSection() {
                                                 type="radio"
                                                 {...register(field.id, { required: "Please select a contact method" })}
                                                 id={option.id}
-                                                value={option.id}
+                                                value={option.value}
                                                 defaultChecked={option.checkedByDefault}
                                             />
                                             <span>{option.display}</span>

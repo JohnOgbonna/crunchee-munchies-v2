@@ -3,30 +3,15 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
-import { z } from "zod";
-import { customerFields } from "@/app/data/customerFields";
+import { customerFields, FormDataType, formSchema } from "@/app/data/customerFields";
 import { useOrderContext } from "@/app/context/OrderContext";
 import { itemId } from "@/app/typesAndInterfaces/orderTypes";
 import { submitOrder } from "@/app/actions/submitOrder";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
+import SuspenseLoader from "../suspenseLoader";
+import { useState } from "react";
 
-// 🔹 Define Schema with Zod
-const formSchema = z.object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email format"),
-    phone: z.string().min(10, "Phone number is required"),
-    notes: z.string().optional(),
-    needsDelivery: z.boolean(),
-    streetAddress: z.string().optional(),
-    city: z.string().optional(),
-    province: z.string().optional(),
-    postalZipCode: z.string().optional(),
-});
-
-// 🔹 Infer Type from Schema
-export type FormDataType = z.infer<typeof formSchema>;
 
 interface CustomerDetailsFormProps {
     item: itemId;
@@ -44,6 +29,7 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
     });
 
     const { orders, removeOrder } = useOrderContext();
+    const [isLoading, setLoading] = useState<boolean>(false);
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
@@ -52,7 +38,7 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("item");
 
-        // ✅ Replace history entry instead of pushing
+        // ✅ Replace history
         router.replace(`${pathname}?${params.toString()}`, { scroll: false });
 
         // ✅ Update state after navigation
@@ -60,12 +46,11 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
             setCustomerData({ name, email });
             setFormSubmitted(true);
         }, 100); // Delay ensures state updates don't interfere
-
-        toast.success("Order submitted successfully!");
     };
 
-    // ✅ Clear the form properly after successful submissions
+
     const onSubmit = async (data: FormDataType) => {
+        setLoading(true);
         const order = { item, ...orders[item] };
         try {
             const response = await submitOrder(data, order);
@@ -84,6 +69,8 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
             }
         } catch (error) {
             toast.error(`Order failed: ${error}`);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -91,7 +78,8 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border-t-[1px] mt-4 py-4">
-            <Toaster richColors position="top-center" closeButton={true} />
+            <Toaster richColors position="bottom-center" closeButton={true} />
+            <SuspenseLoader isLoading={isLoading} type="order" />
             <p className="text-[12px] text-red-600 italic">Note: we prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
             <h3 className="text-lg font-semibold">Your Information</h3>
 

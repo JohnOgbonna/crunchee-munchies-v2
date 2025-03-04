@@ -8,8 +8,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { shopLinks } from "../data/items";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
-import OrderConfirmation from "../components/supporting_components/order/OrderConfirmation";
-
+import Confirmation from "../components/supporting_components/confirmation";
 
 const OrderPageContent = () => {
     const { orders } = useOrderContext();
@@ -72,7 +71,7 @@ const OrderPageContent = () => {
     }
     return (
         <div className="p-4 mx-auto max-w-[1440px]">
-            {formSubmitted && customerData && <OrderConfirmation handleClose={handleSummaryClose} customerData={customerData} />}
+            {formSubmitted && customerData && <Confirmation handleClose={handleSummaryClose} customerData={customerData} type="order" />}
             <h2 className="text-xl font-semibold mb-4 text-slate-700">
                 Select Order to Complete:
             </h2>
