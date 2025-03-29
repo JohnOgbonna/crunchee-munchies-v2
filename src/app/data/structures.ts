@@ -5,9 +5,17 @@ export interface NavSubsections {
     [key: string]: {
         [key: string]: {
             link: string;
+            name?: string;
         };
     };
 };
+export interface NavSubsection {
+    [key: string]: {
+        link: string;
+        name: string;
+    };
+}
+
 
 export const navSections = {
     shop: 'Shop',

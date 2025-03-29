@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { navSections, NavSubsections, navSubsections } from "@/app/data/structures";
-import { useState } from "react";
+import { navSections, NavSubsection, NavSubsections } from "@/app/data/structures";
+import { useState, useEffect } from "react";
 import ShoppingCart from "../../supporting_components/icons/shoppingCart";
 import HamburgerMenu from "../../supporting_components/icons/hamburgerMenu";
 import OrderPanel from "../../supporting_components/shop/orderPanel";
@@ -10,12 +10,33 @@ import { MobileSubsections, DesktopSubsections } from "../../supporting_componen
 import CloseIcon from "../../supporting_components/icons/close";
 import { motion } from "framer-motion";
 import { delayedFadeInAnimationVariants } from "@/app/data/ui";
+import { getCachedItems } from "@/app/api/items/route";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const [hoveredSection, setHoveredSection] = useState<string | null>(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [navSubsections, setNavSubsections] = useState<NavSubsections>({});
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const cachedItems = await getCachedItems();
+                const updatedSubsections: NavSubsections = { shop: {} };
+
+                Object.values(cachedItems).forEach((item) => {
+                    updatedSubsections.shop[item.id] = { link: `shop/${item.id}`, name: item.name };
+                });
+
+                setNavSubsections(updatedSubsections);
+            } catch (error) {
+                console.error("Failed to fetch items for navbar:", error);
+            }
+        };
+
+        fetchItems();
+    }, []);
 
     const toggleSubsections = (section: string) => {
         setExpandedSection(expandedSection === section ? null : section);
@@ -26,8 +47,8 @@ export default function Navbar() {
             initial={{ y: -100, opacity: .75 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{
-                y: { duration: 0.3, ease: 'easeOut', delay: 0.25 },  // slide-down animation
-                opacity: { duration: 0.8, delay: 0.8 },  // Fade in after 0.8 seconds
+                y: { duration: 0.3, ease: 'easeOut', delay: 0.25 },
+                opacity: { duration: 0.8, delay: 0.8 },
             }}
         >
             <div className="md:flex md:justify-between max-w-[1440px] mx-auto">
@@ -42,9 +63,9 @@ export default function Navbar() {
                 {isOpen && <div className="absolute inset-0 bg-black bg-opacity-50 md:hidden" onClick={() => setIsOpen(false)}></div>}
 
                 <ul className={`
-                    flex flex-col z-30 md:z-10 items-stretch gap-2 p-2 bg-orange-200 fixed top-0 right-0 h-full transition-transform duration-700 md:static md:flex-row md:gap-4 md:items-center md:text-[.9rem]
-                    ${isOpen ? ' w-[320px] translate-x-0 ' : 'translate-x-full'} md:w-auto md:min-w-0 md:translate-x-0
-                `}>
+                        flex flex-col z-30 md:z-10 items-stretch gap-2 p-2 bg-orange-200 fixed top-0 right-0 h-full transition-transform duration-700 md:static md:flex-row md:gap-4 md:items-center md:text-[.9rem]
+                        ${isOpen ? ' w-[320px] translate-x-0 ' : 'translate-x-full'} md:w-auto md:min-w-0 md:translate-x-0
+                    `}>
                     <li onClick={() => setIsOpen(false)}
                         className="absolute top-2 right-2 cursor-pointer md:hidden"
                     >
@@ -79,14 +100,14 @@ export default function Navbar() {
 
                             <MobileSubsections
                                 sectionKey={key}
-                                subsections={navSubsections[key] as unknown as NavSubsections || {}}
+                                subsections={navSubsections[key] as NavSubsection || {}}
                                 isExpanded={expandedSection === key}
                                 onClose={() => setIsOpen(false)}
                             />
 
                             <DesktopSubsections
                                 sectionKey={key}
-                                subsections={navSubsections[key] as unknown as NavSubsections || {}}
+                                subsections={navSubsections[key] as NavSubsection || {}}
                                 isHovered={hoveredSection === key}
                             />
                         </motion.li>
@@ -98,7 +119,6 @@ export default function Navbar() {
 
             </div>
 
-            {/* Order Panel */}
             <OrderPanel isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
         </motion.nav>
     );

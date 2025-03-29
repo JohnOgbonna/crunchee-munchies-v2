@@ -1,6 +1,7 @@
 'use server';
 
 import { formData } from "../data/connectContent";
+import { fetchItems } from "./shop";
 
 const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_MESSAGE_URL as string;
 const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string;

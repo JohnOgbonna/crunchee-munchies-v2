@@ -5,11 +5,12 @@ export enum itemType {
 }
 
 export enum itemId {
-    chin_chin_standard = 'ch-1',
-    chin_chin_wholesale = 'ch-w',
-    chin_chin_event_order = 'ch-sp',
-    chin_chin_bundle = 'ch-b',
+    chin_chin_standard = 'ch_chin_standard',
+    chin_chin_wholesale = 'ch_chin_wholesale',
+    chin_chin_event_order = 'ch_chin_event_order',
+    chin_chin_bundle = 'ch_chin_bundle',
 }
+   
 export const itemValues = {
     [itemId.chin_chin_standard]: 'ch-1',
     [itemId.chin_chin_wholesale]: 'ch-w',

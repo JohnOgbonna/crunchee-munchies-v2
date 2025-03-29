@@ -2,13 +2,14 @@
 
 import ExpandedOrderView from "../components/supporting_components/order/expandedOrderView";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { itemId } from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../components/supporting_components/order/orderSummary";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { shopLinks } from "../data/items";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
 import Confirmation from "../components/supporting_components/confirmation";
+import { getCachedItems } from "../api/items/route";
 
 const OrderPageContent = () => {
     const { orders } = useOrderContext();
@@ -16,23 +17,34 @@ const OrderPageContent = () => {
     const pathname = usePathname();
     const { formSubmitted, customerData, setFormSubmitted, setCustomerData } = useOrderSubmitContext();
     const router = useRouter();
-
+    const [items, setItems] = useState<Record<string, item> | undefined>(undefined);
     const [selectedItem, setSelectedItem] = useState<itemId | null>(null);
     const [isExiting, setIsExiting] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    // Initialize selected item from search params
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const data = await getCachedItems();
+                setItems(data);
+            } catch (err) {
+                console.error("Failed to fetch items:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchItems();
+    }, []);
+
     useEffect(() => {
         const itemParam = searchParams.get("item");
-        if (!itemParam) return;
-
-        const matchedItem = Object.keys(shopLinks).find(
-            (key) => shopLinks[key as itemId] === itemParam
-        ) as itemId;
-
-        if (matchedItem && matchedItem !== selectedItem) {
-            setSelectedItem(matchedItem);
+        if (itemParam && items) {
+            const itemMatch = Object.values(items).find(item=> item.id === itemParam) 
+            if(itemMatch && itemMatch.id !== selectedItem) {
+                setSelectedItem(itemMatch.id);
+            }
         }
-    }, [searchParams, selectedItem]);
+    }, [items, searchParams, selectedItem]);
 
     // Handle case where selected item is removed from orders
     useEffect(() => {
@@ -61,7 +73,7 @@ const OrderPageContent = () => {
 
         setSelectedItem(id);
         const params = new URLSearchParams(searchParams.toString());
-        params.set("item", shopLinks[id] || id);
+        params.set("item", selectedItem || id);
         router.replace(`${pathname}?${params.toString()}`);
     };
 

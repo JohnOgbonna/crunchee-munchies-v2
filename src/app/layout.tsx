@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/core_components/navbar/navbar";
 import Footer from "./components/core_components/footer/footer";
 import { OrderProvider } from "./context/OrderContext"; // Import OrderProvider
+import { ItemsProvider } from "./context/ItemsContext";
 
 export const metadata: Metadata = {
   title: "Crunchee Munchies",
@@ -18,9 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <OrderProvider> {/* Wrap the entire app with OrderProvider */}
-          <Navbar />
-          {children}
-          <Footer />
+          <ItemsProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ItemsProvider>
         </OrderProvider>
       </body>
     </html>

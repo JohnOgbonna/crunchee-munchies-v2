@@ -1,13 +1,13 @@
+import { NavSubsection } from "@/app/data/structures";
 import React from "react";
 
 interface SubsectionsProps {
   sectionKey: string;
-  subsections: NavSubsections;
+  subsections: NavSubsection;
   isExpanded?: boolean;
   isHovered?: boolean;
   onClose?: () => void;
 }
-type NavSubsections = Record<string, Record<string, { link: string }>>;
 
 export const MobileSubsections: React.FC<SubsectionsProps> = ({
   subsections,
@@ -22,8 +22,8 @@ export const MobileSubsections: React.FC<SubsectionsProps> = ({
     >
       {Object.entries(subsections).map(([subKey, subValue]) => (
         <li key={subKey} className="pl-4 py-1 text-sm text-gray-700">
-          <a href={`/${subValue.link}`} onClick={onClose}>
-            {subKey.replace(/_/g, " ")}
+          <a href={`/${subValue.name}`} onClick={onClose}>
+            {subValue.name}
           </a>
         </li>
       ))}
@@ -49,7 +49,7 @@ export const DesktopSubsections: React.FC<SubsectionsProps> = ({
           key={subKey}
           className="py-1 px-3 text-sm text-gray-700 hover:bg-orange-300 rounded-md"
         >
-          <a href={`/${subValue.link}`}>{subKey.replace(/_/g, " ")}</a>
+          <a href={`/${subValue.link}`}>{subValue.name}</a>
         </li>
       ))}
     </ul>

@@ -3,25 +3,35 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
-import { itemDataMap, shopLinks } from "@/app/data/items";
+import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import ItemVariationSelector from "@/app/components/supporting_components/shop/itemVariationSelector";
 import { Toaster } from "sonner";
 import SuggestedItems from "@/app/components/supporting_components/shop/suggestedItems";
 import SelectedVariationDisplay from "@/app/components/supporting_components/shop/selectedVariationDisplay";
 import Link from "next/link";
 import OrderSummary from "@/app/components/supporting_components/order/orderSummary";
+import { getCachedItems } from "@/app/api/items/route";
 
-const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
+
+const ShopItemPage = ({ params: { item } }: { params: { item: itemId } }) => {
   const searchParams = useSearchParams();
   const { orders } = useOrderContext();
 
-  const selectedItem: item | undefined = itemDataMap[item as keyof typeof itemDataMap];
-  const { id, size_variants, name, description } = selectedItem?? {};
+  const [items, setItems] = useState<Record<string, item> | undefined>(undefined);
+
   const selectedVariantId = searchParams.get("variant") || "";
   const [selectedVariation, setSelectedVariation] = useState<itemSizeVariation | null>(null);
   const [_quantity, setQuantity] = useState(0);
+  const selectedItem = items ? items[item] : undefined;
+  const { id, size_variants, name, description } = selectedItem ?? {};
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedItems = await getCachedItems();
+      setItems(fetchedItems)
+    };
+    fetchData();
+  }, [item]);
 
   useEffect(() => {
     setSelectedVariation(() =>
@@ -31,7 +41,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
 
   useEffect(() => {
     if (selectedVariation) {
-      const existingQuantity = orders[id]?.variations[selectedVariation.id]?.quantity;
+      const existingQuantity = id ? orders[id]?.variations[selectedVariation.id]?.quantity : undefined;
       const minQuantity = selectedVariation.minimumQuantity || 0;
       setQuantity(existingQuantity ?? minQuantity);
     }
@@ -53,7 +63,7 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
       <p className="max-w-[600px] mx-auto mt-4 mb-8 p-2 bg-[#f5e3c5] rounded-lg border-[1px] shadow-md md:mb-10 lg:max-w-[750px]">{description}</p>
       <div className="md:flex md:items-center md:justify-center gap-4 items-start mx-auto ">
         <ItemVariationSelector
-          itemId={id}
+          itemId={id as itemId}
           variations={size_variants ?? []}
           selectedVariantId={selectedVariantId}
         />
@@ -63,13 +73,13 @@ const ShopItemPage = ({ params: { item } }: { params: { item: string } }) => {
           />
         }
       </div>
-      <OrderSummary selectedItemId={id} orders={orders} />
+      <OrderSummary selectedItemId={id as itemId} orders={orders} />
       <p className="mt-4 font-semibold text-center">{selectedVariation?.description}</p>
       <div className="z-0">
-        <SuggestedItems items={Object.values(itemDataMap).filter((item) => item.id !== id)} />
+        <SuggestedItems items={items ? Object.values(items).filter((item) => item.id !== id) : []} />
       </div>
       {Object.keys(orders).length > 0 && (
-        <Link href={`/order?item=${shopLinks[id]}`}>
+        <Link href={`/order?item=${selectedItem.id}`}>
           <button className={`fixed bottom-4 right-4 px-6 py-3 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white`}>
             Complete Order
           </button>
