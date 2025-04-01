@@ -5,19 +5,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
 import { customerFields, FormDataType, formSchema } from "@/app/data/customerFields";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { itemId } from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemId, sendOrder, sendOrderVariations } from "@/app/typesAndInterfaces/orderTypes";
 import { submitOrder } from "@/app/actions/submitOrder";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
 import SuspenseLoader from "../suspenseLoader";
-import { useState } from "react";
+import { use, useMemo, useState } from "react";
+import { handleOrderSubmission } from "./handleOrderSubmission";
 
 
 interface CustomerDetailsFormProps {
     item: itemId;
+    items: Record<string, item> | undefined;
 }
 
-const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
+const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
     const {
         register,
         handleSubmit,
@@ -34,6 +36,7 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
     const pathname = usePathname();
     const router = useRouter();
     const { setCustomerData, setFormSubmitted } = useOrderSubmitContext();
+
     const handleOrderSuccess = (name: string, email: string) => {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("item");
@@ -50,28 +53,17 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
 
 
     const onSubmit = async (data: FormDataType) => {
-        setLoading(true);
-        const order = { item, ...orders[item] };
-        try {
-            const response = await submitOrder(data, order);
-
-            if (response?.error) {
-                toast.error(`Order failed: ${response.error}`);
-            } else if (response) {
-                handleOrderSuccess(data.firstName, data.email);
-
-                setTimeout(() => {
-                    reset(); // ✅ Clear form safely after updates
-                    removeOrder(item);
-                }, 150);
-            } else {
-                toast.error("An unknown error occurred.");
-            }
-        } catch (error) {
-            toast.error(`Order failed: ${error}`);
-        } finally {
-            setLoading(false);
-        }
+        await handleOrderSubmission(
+            data,
+            item,
+            items,
+            orders,
+            removeOrder,
+            handleOrderSuccess,
+            reset,
+            setLoading,
+            toast // ✅ Pass toast as an argument
+        );
     };
 
     const watchedValues = watch();

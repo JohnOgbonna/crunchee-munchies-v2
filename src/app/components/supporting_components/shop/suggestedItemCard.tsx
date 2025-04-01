@@ -1,7 +1,6 @@
 'use client'
 import { item } from "@/app/typesAndInterfaces/orderTypes";
 import Link from "next/link";
-import { shopLinks } from "@/app/data/items";
 import { motion } from "framer-motion";
 import { delayedFadeInAnimationVariants } from "@/app/data/ui";
 import Image from "next/image";
@@ -21,7 +20,7 @@ const SuggestedItemCard = ({ item, index }: SuggestedItemCardProps) => {
             viewport={{ once: true }}
             
         >
-            <Link href={`/shop/${shopLinks[item.id]}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`}
+            <Link href={`/shop/${item.id}${item.size_variants ? '?variant=' + item.size_variants[0].id : ""}`}
                 className="relative z-0">
                 <div className="relative cursor-pointer group bg-[#f5e3c5] rounded-lg shadow-md transition-all duration-300 z-0 hover:shadow-lg">
                     <h3 className="text-lg font-semibold mb-2 p-2">{item.name}</h3>

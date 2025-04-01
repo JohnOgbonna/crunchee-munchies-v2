@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { itemId } from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../order/orderSummary";
 
 interface OrderPanelProps {
     isCartOpen: boolean;
     setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    items: Record<string, item> | undefined;
 }
 
-export default function OrderPanel({ isCartOpen, setIsCartOpen }: OrderPanelProps) {
+export default function OrderPanel({ isCartOpen, setIsCartOpen, items }: OrderPanelProps) {
     const { orders, clearOrders } = useOrderContext();
     const panelRef = useRef<HTMLDivElement | null>(null);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -63,13 +64,13 @@ export default function OrderPanel({ isCartOpen, setIsCartOpen }: OrderPanelProp
                 <div className="p-4 space-y-4 overflow-auto h-full">
                     {Object.keys(orders).length > 0 ?
                         Object.entries(orders).map(([orderId]) => (
-                            <OrderSummary key={orderId} selectedItemId={orderId as itemId} orders={orders} isNav closeCart={closeCart} />
+                            <OrderSummary key={orderId} selectedItemId={orderId as itemId} orders={orders} isNav closeCart={closeCart} items = {items} />
                         ))
                         : (
                             <p className="text-center text-gray-500">Your cart is empty.</p>
                         )}
                     {Object.keys(orders).length > 0 && <p className="font-bold hover:cursor-pointer hover:underline hover:scale-105 transition-all duration-400 ease-in-out text-gray-500"
-                        onClick={() => {clearOrders()}}
+                        onClick={() => { clearOrders() }}
                     >Remove all</p>}
                 </div>
             </div>

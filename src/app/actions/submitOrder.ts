@@ -2,7 +2,7 @@
 
 import { FormDataType } from "../data/customerFields";
 import { sendOrder } from "../typesAndInterfaces/orderTypes";
-
+import fs from "fs/promises";
 
 const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_ORDER_URL as string; // Lambda function URL
 const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string; // access key
@@ -13,9 +13,6 @@ export async function submitOrder(customer: FormDataType, order: sendOrder) {
         if (!order || Object.keys(order).length === 0) {
             throw new Error("No order found.");
         }
-
-        // Get the first and only item ID
-        const [itemId] = Object.keys(order);
 
         if (!order || Object.keys(order.variations).length === 0) {
             throw new Error("Order must contain at least one variation.");
@@ -47,4 +44,3 @@ export async function submitOrder(customer: FormDataType, order: sendOrder) {
         return { error: (error as Error).message };
     }
 }
-

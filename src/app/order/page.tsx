@@ -6,7 +6,6 @@ import { item, itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../components/supporting_components/order/orderSummary";
 import { Suspense, use, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { shopLinks } from "../data/items";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
 import Confirmation from "../components/supporting_components/confirmation";
 import { getCachedItems } from "../api/items/route";
@@ -39,8 +38,8 @@ const OrderPageContent = () => {
     useEffect(() => {
         const itemParam = searchParams.get("item");
         if (itemParam && items) {
-            const itemMatch = Object.values(items).find(item=> item.id === itemParam) 
-            if(itemMatch && itemMatch.id !== selectedItem) {
+            const itemMatch = Object.values(items).find(item => item.id === itemParam)
+            if (itemMatch && itemMatch.id !== selectedItem) {
                 setSelectedItem(itemMatch.id);
             }
         }
@@ -94,7 +93,7 @@ const OrderPageContent = () => {
             >
                 {/* Order Summary List */}
                 <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden md:min-w-[355px] lg:min-w-[385px] flex flex-col gap-4 ${selectedItem ? " p-0 m-0" : " md:w-1/3"
+                    className={`sm:w-full transition-all duration-500 ease-in-out overflow-hidden md:min-w-[355px] lg:min-w-[385px] flex flex-col gap-4 ${selectedItem ? " p-0 m-0" : " md:w-1/3"
                         }`}
                 >
                     {Object.keys(orders).length > 0 ? Object.keys(orders).map((id) => (
@@ -104,11 +103,12 @@ const OrderPageContent = () => {
                                 orders={orders}
                                 isOrderPage={true}
                                 isSelected={id === selectedItem}
+                                items={items}
                             />
                         </div>
                     )) : (
                         <div className="flex flex-col gap-4 font-bold">
-                            <p className="text-slate-700">No orders found.</p>
+                           { <p className="text-slate-700">No orders found.</p>}
                             <a href="/shop" className="text-blue-600 hover:scale-105 transition-all ease-out duration-400 underline">
                                 Shop Now
                             </a>
@@ -127,6 +127,7 @@ const OrderPageContent = () => {
                             selectedItemId={selectedItem as itemId}
                             orders={orders}
                             handleClose={handleClose}
+                            items={items}
                         />
                     }
                 </div>

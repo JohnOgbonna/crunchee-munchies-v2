@@ -16,7 +16,7 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
     const formattedItems: Record<string, item> = {};
 
     data.forEach((dbItem) => {
-        const sizeVariants: itemSizeVariation[] = dbItem.item_variations.map((variant: itemSizeVariation) => ({
+        const sizeVariants: itemSizeVariation[] = dbItem.item_variations.map((variant: any) => ({
             parentId: dbItem.id,
             id: variant.id,
             name: variant.name,
@@ -24,12 +24,11 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
             description: variant.description,
             type: variant.type,
             url: variant.url,
-            maximumQuantity: variant.maximumQuantity || undefined,
-            minimumQuantity: variant.minimumQuantity || undefined,
+            maximumQuantity: variant.maximum_quantity || undefined,
+            minimumQuantity: variant.minimum_quantity || undefined,
             savings: variant.savings || undefined,
-            bundleSize: variant.bundleSize || undefined,
+            bundleSize: variant.bundle_size || undefined,
         }));
-
         formattedItems[dbItem.id] = {
             id: dbItem.id,
             type: dbItem.type,
@@ -37,6 +36,7 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
             description: dbItem.description,
             size_variants: sizeVariants,
             heroImage: dbItem.hero_image,
+            listOrder: dbItem.list_order || undefined,
         };
     });
 

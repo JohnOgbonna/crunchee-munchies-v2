@@ -2,7 +2,6 @@
 import { motion } from "framer-motion";
 import SuggestedItemCard from "./suggestedItemCard";
 import { item } from "@/app/typesAndInterfaces/orderTypes";
-import TestComponent from "../../tests/testComponent";
 
 
 const SuggestedItems = ({ items }: { items: item[] }) => {

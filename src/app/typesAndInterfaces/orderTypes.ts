@@ -10,7 +10,7 @@ export enum itemId {
     chin_chin_event_order = 'ch_chin_event_order',
     chin_chin_bundle = 'ch_chin_bundle',
 }
-   
+
 export const itemValues = {
     [itemId.chin_chin_standard]: 'ch-1',
     [itemId.chin_chin_wholesale]: 'ch-w',
@@ -26,7 +26,8 @@ export type item = {
     size_variants?: itemSizeVariation[],
     flavor_variant?: string,
     mostPopular?: boolean,
-    heroImage: string
+    heroImage: string,
+    listOrder?: number,
 }
 
 export type itemSizeVariation = {
@@ -40,7 +41,8 @@ export type itemSizeVariation = {
     maximumQuantity?: number,
     url?: string,
     savings?: number,
-    bundleSize?: number
+    bundleSize?: number,
+    listOrder?: number,
 }
 
 export interface featuredItem {
@@ -71,11 +73,31 @@ export interface Orders extends Record<itemId, {
 }
 
 export interface sendOrder {
-    item: itemId,
-    variations: {
-        [variantId: string]: {
-            quantity: number;
-        };
+    id: itemId
+    type: itemType,
+    name: string,
+    description: string
+    flavor_variant?: string,
+    mostPopular?: boolean,
+    heroImage: string,
+    listOrder?: number,
+    variations: sendOrderVariations
+}
+
+export interface sendOrderVariations {
+    [variantId: string]: {
+        quantity: number;
+        name: string;
+        id: string;
+        price: number;
+        description: string,
+        type: itemType,
+        minimumQuantity?: number,
+        maximumQuantity?: number,
+        url?: string,
+        savings?: number,
+        bundleSize?: number,
+        listOrder?: number,
     };
 }
 

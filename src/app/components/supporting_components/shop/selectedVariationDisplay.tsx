@@ -2,19 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { useOrderContext } from "@/app/context/OrderContext";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
-import { shopLinks } from "@/app/data/items";
+
 
 interface SelectedVariationDisplayProps {
   selectedVariation: itemSizeVariation;
+  items: Record<string, item>;
 }
 
 const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
-  selectedVariation,
+  selectedVariation, items
 }) => {
   const { orders, addOrder } = useOrderContext();
   const existingOrder =
@@ -78,7 +79,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 text-center md:text-left md:items-center md:w-[70%] md:min-w-[530px] lg:min-w-[600px] mb-6">
+    <div className="flex flex-col md:flex-row md:justify-center gap-4 text-center md:text-left md:items-center md:w-[70%] md:min-w-[530px] lg:min-w-[600px] mb-6">
       <motion.div
         key={selectedVariation.id}
         initial={{ opacity: .5, scale: 0.95, x: -50 }}
@@ -149,7 +150,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
           </button>
           {orders[selectedVariation.parentId] && (
             <Link
-              href={`/order?item=${shopLinks[selectedVariation.parentId]}`}
+              href={`/order?item=${selectedVariation.parentId}`}
               className="text-md font-semibold text-red-600 hover:underline hover:red-800 mt-4 text-center hover:scale-105 transition-all duration-300"
             >
               Complete Order
