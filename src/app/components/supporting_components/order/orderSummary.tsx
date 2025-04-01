@@ -95,7 +95,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
                     onClick={handleClose}
                 >Complete Order</Link>
             }
-            <p className="font-bold text-sm text-gray-600 text-center mt-1 hover:underline cursor-pointer hover:text-gray-800 hover:scale-105 transition-all duration-300"
+            <p className="font-bold text-sm text-gray-600 text-center mt-1 hover:underline cursor-pointer hover:text-gray-800 hover:scale-105 transition-all duration-300 w-fit mx-auto"
                 onClick={() => removeOrder(selectedItemId)}
             >Remove</p>
         </div>

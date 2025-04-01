@@ -101,7 +101,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
       <div>
         <div className="flex flex-col items-center">
           {selectedVariation.savings && (
-            <p className="text-white font-semibold py-2 px-4 bg-red-700 rounded-[20px] mb-4 md:hidden">
+            <p className="text-white font-semibold py-2 px-4 bg-red-700 rounded-[20px] mb-4">
               {`Savings of  $${selectedVariation.savings}!`}
             </p>
           )}

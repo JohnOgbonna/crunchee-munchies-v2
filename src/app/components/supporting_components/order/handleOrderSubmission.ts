@@ -1,5 +1,5 @@
 import { submitOrder } from "@/app/actions/submitOrder";
-import { item, itemId, Orders, sendOrder, sendOrderVariations } from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemId, itemSizeVariation, Orders, sendOrder, sendOrderVariations } from "@/app/typesAndInterfaces/orderTypes";
 import { FormDataType } from "@/app/data/customerFields";
 
 
@@ -12,7 +12,7 @@ export const handleOrderSubmission = async (
     handleOrderSuccess: (name: string, email: string) => void,
     reset: () => void,
     setLoading: (loading: boolean) => void,
-    toast: any
+    toast: (message: string, options?: { error?: boolean } | undefined) => void
 ) => {
     setLoading(true);
     const selectedOrder = orders[item];
@@ -41,7 +41,7 @@ export const handleOrderSubmission = async (
     }
 
     // Create variations of size variants
-    selectedItem.size_variants.forEach((variant: any) => {
+    selectedItem.size_variants.forEach((variant: itemSizeVariation) => {
         if (selectedOrder.variations[variant.id]) {
             variations[variant.id] = {
                 quantity: selectedOrder.variations[variant.id].quantity,

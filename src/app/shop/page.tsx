@@ -1,9 +1,8 @@
 import ItemCard from "../components/supporting_components/shop/itemCard";
-import { getCachedItems } from "../api/items/route";
+import { getCachedItems } from "../lib/fetchItems";
 
 const Shop: React.FC = async () => {
     const items = await getCachedItems();
-
     const sortedItems = Object.values(items).sort((a, b) => (a.listOrder ?? Infinity) - (b.listOrder ?? Infinity));
     return (
         <div className="container mx-auto p-4 text-slate-700">

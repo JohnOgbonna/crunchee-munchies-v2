@@ -5,12 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
 import { customerFields, FormDataType, formSchema } from "@/app/data/customerFields";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { item, itemId, sendOrder, sendOrderVariations } from "@/app/typesAndInterfaces/orderTypes";
-import { submitOrder } from "@/app/actions/submitOrder";
+import { item, itemId} from "@/app/typesAndInterfaces/orderTypes";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
 import SuspenseLoader from "../suspenseLoader";
-import { use, useMemo, useState } from "react";
+import { useState } from "react";
 import { handleOrderSubmission } from "./handleOrderSubmission";
 
 
@@ -62,7 +61,7 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
             handleOrderSuccess,
             reset,
             setLoading,
-            toast // ✅ Pass toast as an argument
+            toast as (message: string, options?: { error?: boolean } | undefined) => void
         );
     };
 

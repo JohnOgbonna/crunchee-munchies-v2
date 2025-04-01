@@ -3,6 +3,7 @@ import { supabase } from "@/utils/supabase";
 import { revalidateTag } from "next/cache"; // Enables revalidation
 
 import { item, itemSizeVariation } from "../typesAndInterfaces/orderTypes";
+import { cache } from "react";
 
 // Function to fetch and format item data
 export async function fetchItemsFromDB(): Promise<Record<string, item>> {
@@ -47,3 +48,7 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
 export async function revalidateItems() {
     revalidateTag("items"); // This tag is tied to cached data
 }
+
+export const getCachedItems = cache(async () => {
+    return fetchItemsFromDB();
+});

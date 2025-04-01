@@ -11,7 +11,8 @@ import { MobileSubsections, DesktopSubsections } from "../../supporting_componen
 import CloseIcon from "../../supporting_components/icons/close";
 import { motion } from "framer-motion";
 import { delayedFadeInAnimationVariants } from "@/app/data/ui";
-import { getCachedItems } from "@/app/api/items/route";
+import { getCachedItems } from "@/app/lib/fetchItems";
+import { item } from "@/app/typesAndInterfaces/orderTypes";
 
 
 function NavbarComponent() {
@@ -19,7 +20,7 @@ function NavbarComponent() {
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const [hoveredSection, setHoveredSection] = useState<string | null>(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [items, setItems] = useState<Record<string, any> | undefined>(undefined);
+    const [items, setItems] = useState<Record<string, item> | undefined>(undefined);
 
 
     useEffect(() => {

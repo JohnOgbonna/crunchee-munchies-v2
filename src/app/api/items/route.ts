@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { fetchItemsFromDB } from "@/app/lib/fetchItems";
+import { fetchItemsFromDB, getCachedItems } from "@/app/lib/fetchItems";
 import { cache } from "react";
 
 // Cache the database call to optimize performance
-export const getCachedItems = cache(async () => {
-    return fetchItemsFromDB();
-});
 
-export async function GET() {
+// Named export for the GET handler
+export async function GET(request: Request) {
     try {
         const items = await getCachedItems();
         return NextResponse.json(items);

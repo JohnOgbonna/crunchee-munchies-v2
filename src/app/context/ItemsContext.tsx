@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import { getCachedItems } from "../api/items/route";
+import { getCachedItems } from "../lib/fetchItems";
 import { item } from "../typesAndInterfaces/orderTypes";
 
 
@@ -49,7 +49,6 @@ export const ItemsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useItems = () => {
     const context = useContext(ItemsContext);
-    console.log("useItems context:", context); // Debugging output
     if (!context) {
         throw new Error("useItems must be used within an ItemsProvider");
     }

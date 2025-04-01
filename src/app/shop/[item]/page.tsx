@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import Loading from "../loading";
 import ShopItems from "./ShopItems";
-import { getCachedItems } from "@/app/api/items/route";
+import { getCachedItems } from "@/app/lib/fetchItems";
 
 
 const ShopItemPage = async ({ params: { item } }: { params: { item: string } }) => {

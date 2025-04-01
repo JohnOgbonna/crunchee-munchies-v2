@@ -8,7 +8,7 @@ import { Suspense, use, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
 import Confirmation from "../components/supporting_components/confirmation";
-import { getCachedItems } from "../api/items/route";
+import { getCachedItems } from "../lib/fetchItems";
 
 const OrderPageContent = () => {
     const { orders } = useOrderContext();
@@ -46,14 +46,14 @@ const OrderPageContent = () => {
     }, [items, searchParams, selectedItem]);
 
     // Handle case where selected item is removed from orders
-    useEffect(() => {
-        if (selectedItem && !orders[selectedItem]) {
-            setSelectedItem(null);
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete("item");
-            router.replace(`${pathname}?${params.toString()}`);
-        }
-    }, [selectedItem, orders, router, pathname, searchParams]);
+    // useEffect(() => {
+    //     if (selectedItem && !orders[selectedItem]) {
+    //         setSelectedItem(null);
+    //         const params = new URLSearchParams(searchParams.toString());
+    //         params.delete("item");
+    //         router.replace(`${pathname}?${params.toString()}`);
+    //     }
+    // }, [selectedItem, orders, router, pathname, searchParams]);
 
     const handleClose = () => {
         setIsExiting(true);
@@ -69,10 +69,10 @@ const OrderPageContent = () => {
 
     const handleItemSelection = (id: itemId) => {
         if (selectedItem === id) return;
-
-        setSelectedItem(id);
+    
+        setSelectedItem(id); // Schedule the state update
         const params = new URLSearchParams(searchParams.toString());
-        params.set("item", selectedItem || id);
+        params.set("item", id); // Use `id` directly instead of `selectedItem`
         router.replace(`${pathname}?${params.toString()}`);
     };
 
