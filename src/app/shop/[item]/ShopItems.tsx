@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { Toaster } from "sonner";
 
-const ShopItems = ({ item, items }: { item: string; items: Record<string, item> }) => {
+const ShopItems = ({ item, items }: { item: keyof typeof orders; items: Record<string, item> }) => {
   const searchParams = useSearchParams();
   const { orders } = useOrderContext();
 
@@ -62,7 +62,7 @@ const ShopItems = ({ item, items }: { item: string; items: Record<string, item> 
       <div className="z-0">
         <SuggestedItems items={Object.values(items).filter((i) => i.id !== id)} />
       </div>
-      {Object.keys(orders).length > 0 && (
+      {Object.keys(orders).length > 0 && orders[item as keyof typeof orders] &&(
         <Link href={`/order?item=${id}`}>
           <button className="fixed bottom-4 right-4 px-6 py-3 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
             Complete Order

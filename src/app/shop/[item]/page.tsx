@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import Loading from "../loading";
 import ShopItems from "./ShopItems";
 import { getCachedItems } from "@/app/lib/fetchItems";
+import { Orders } from "@/app/typesAndInterfaces/orderTypes";
 
 
 const ShopItemPage = async ({ params: { item } }: { params: { item: string } }) => {
@@ -9,7 +10,7 @@ const ShopItemPage = async ({ params: { item } }: { params: { item: string } }) 
 
   return (
     <Suspense fallback={<Loading message="Loading Item" />}>
-      <ShopItems item={item} items={items} />
+      <ShopItems item={item as keyof Orders} items={items} />
     </Suspense>
   );
 };

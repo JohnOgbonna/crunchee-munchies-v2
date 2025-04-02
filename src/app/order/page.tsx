@@ -4,7 +4,7 @@ import ExpandedOrderView from "../components/supporting_components/order/expande
 import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../components/supporting_components/order/orderSummary";
-import { Suspense, use, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
 import Confirmation from "../components/supporting_components/confirmation";
@@ -38,23 +38,21 @@ const OrderPageContent = () => {
     useEffect(() => {
         const itemParam = searchParams.get("item");
         if (itemParam && items) {
-            const itemMatch = Object.values(items).find(item => item.id === itemParam)
-            if (itemMatch && itemMatch.id !== selectedItem) {
-                setSelectedItem(itemMatch.id);
+            const itemMatch = Object.values(items).find(item => item.id === itemParam);
+            const isInOrder = Object.keys(orders).includes(itemParam);
+
+            if (itemMatch && isInOrder) {
+                if (itemMatch.id !== selectedItem) {
+                    setSelectedItem(itemMatch.id); // Update selectedItem only if it's different
+                }
+            } else {
+                setSelectedItem(null);
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete("item");
+                router.replace(`${pathname}?${params.toString()}`);
             }
         }
-    }, [items, searchParams, selectedItem]);
-
-    // Handle case where selected item is removed from orders
-    // useEffect(() => {
-    //     if (selectedItem && !orders[selectedItem]) {
-    //         setSelectedItem(null);
-    //         const params = new URLSearchParams(searchParams.toString());
-    //         params.delete("item");
-    //         router.replace(`${pathname}?${params.toString()}`);
-    //     }
-    // }, [selectedItem, orders, router, pathname, searchParams]);
-
+    }, [items, searchParams, orders, pathname, router]); // Removed `selectedItem` from dependencies
     const handleClose = () => {
         setIsExiting(true);
         const params = new URLSearchParams(searchParams.toString());
@@ -69,7 +67,7 @@ const OrderPageContent = () => {
 
     const handleItemSelection = (id: itemId) => {
         if (selectedItem === id) return;
-    
+
         setSelectedItem(id); // Schedule the state update
         const params = new URLSearchParams(searchParams.toString());
         params.set("item", id); // Use `id` directly instead of `selectedItem`
@@ -108,7 +106,7 @@ const OrderPageContent = () => {
                         </div>
                     )) : (
                         <div className="flex flex-col gap-4 font-bold">
-                           { <p className="text-slate-700">No orders found.</p>}
+                            {<p className="text-slate-700">No orders found.</p>}
                             <a href="/shop" className="text-blue-600 hover:scale-105 transition-all ease-out duration-400 underline">
                                 Shop Now
                             </a>
