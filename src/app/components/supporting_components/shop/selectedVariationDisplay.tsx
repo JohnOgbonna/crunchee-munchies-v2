@@ -109,7 +109,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
             <h2 className="text-lg font-semibold">{selectedVariation.name}</h2>
             <p className="text-gray-600">Price: ${selectedVariation.price}</p>
             <p className="text-gray-700 font-semibold mt-2">
-              Total: ${(selectedVariation.price * quantity).toFixed(2)}
+              Total: ${!quantity ||quantity < 1 ? (0).toFixed(2) : (selectedVariation.price * quantity).toFixed(2)}
             </p>
           </div>
           <div className="flex items-center justify-center md:justify-start gap-4 mt-2 pb-1">
@@ -127,7 +127,7 @@ const SelectedVariationDisplay: React.FC<SelectedVariationDisplayProps> = ({
               type="number"
               value={quantity}
               onChange={(e) =>
-                handleQuantityChange(parseInt(e.target.value) || 0)
+                handleQuantityChange(parseInt(e.target.value))
               }
               className="w-16 text-center text-lg font-semibold border-b-[1px] border-slate-700 outline-none bg-transparent"
             />

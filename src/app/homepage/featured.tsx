@@ -7,6 +7,18 @@ import Link from "next/link"
 import { featuredItem } from "../typesAndInterfaces/orderTypes"
 const featuredSections: featuredItem[] = [
     {
+        name: 'New Products Available',
+        description: 'We have new products available; Meat pies and Fish Rolls! (Pickup only)',
+        link: '/shop/meat_pie_fish_roll?variant=mp-1',
+        image: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/busy-bee/meat-pie-fish-roll-hero.jpg'
+    },
+    {
+        name: 'Connect With Us',
+        description: 'Follow us on social media for updates, to learn more about us and to see what we\'re up to!',
+        link: '/connect', 
+        image: 'https://cruncheemunchies.s3.us-west-2.amazonaws.com/team/team-1.png'
+    },
+    {
         name: 'Chin Chin',
         description: 'A Staple African Snack. Perfected, Order Now!',
         link: '/shop/chin_chin_standard?variant=ch-1-750',

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React from "react";
 import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import Link from "next/link";
 import CloseIcon from "../icons/close";
@@ -73,9 +73,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ selectedItemId, orders, isN
                 {Object.entries(selectedOrder.variations).map(([variantId, orderItem]) =>
                     orderItem.quantity > 0 ? (
                         <li key={variantId} className="flex gap-x-2 items-center text-gray-700 w-full text-[.8rem] md:text-[.9rem] justify-between">
-                            <span className="w-[120px] md:w-[180px]">
+                            <span className="w-[120px] md:w-[180px] text-center">
                                 <span>
-                                    {`${selectedItem.name}: ${variations[variantId].name} - `}
+                                    {`${variations[variantId].name} - `}
                                     <span className="font-semibold">{`$${variations[variantId].price}`}</span>
                                 </span>
                             </span>

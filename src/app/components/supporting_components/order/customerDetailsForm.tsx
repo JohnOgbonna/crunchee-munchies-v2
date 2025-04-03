@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
 import { customerFields, FormDataType, formSchema } from "@/app/data/customerFields";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { item, itemId} from "@/app/typesAndInterfaces/orderTypes";
+import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
 import SuspenseLoader from "../suspenseLoader";
@@ -66,17 +66,40 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
     };
 
     const watchedValues = watch();
+    const selectedSizeVariants: Record<string, itemSizeVariation> = {};
+    const selectedItem = items?.[item] || null;
+
+    if (selectedItem) {
+        selectedItem.size_variants?.forEach((sizeVariant) => {
+            if (orders[item]?.variations?.[sizeVariant.id]) {
+                selectedSizeVariants[sizeVariant.id] = sizeVariant;
+            }
+        });
+    }
+    const pickUpOnlyOrder = Object.values(selectedSizeVariants).some((sizeVariant) => sizeVariant.pickupOnly);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border-t-[1px] mt-4 py-4">
             <Toaster richColors position="bottom-center" closeButton={true} />
             <SuspenseLoader isLoading={isLoading} type="order" />
-            <p className="text-[12px] text-red-600 italic">Note: we prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
+            <p className="text-[12px] text-red-600 italic">Note: We prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
+
+            {pickUpOnlyOrder &&
+                <div>
+                    {
+                        <p className="text-[12px] text-red-600 italic">Note: This order is only available for pick up because of these items:</p>}
+                    {Object.values(selectedSizeVariants).map((sizeVariant) => {
+                        if (sizeVariant.pickupOnly) {
+                            return <p key={sizeVariant.id} className="text-[12px] text-red-600 italic mt-[2px]">{`- ${sizeVariant.name}`}</p>
+                        }
+                    })}
+                </div>
+            }
             <h3 className="text-lg font-semibold">Your Information</h3>
 
             {Object.values(customerFields).map((field) => {
                 if (field.dependsOn && !watchedValues[field.dependsOn as keyof FormDataType]) return null;
-
+                if (field.id === "needsDelivery" && pickUpOnlyOrder) return null
                 return (
                     <div key={field.id} className="flex flex-col">
                         {field.inputType !== "checkbox" && (
@@ -132,6 +155,10 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
                     </div>
                 );
             })}
+            {
+                pickUpOnlyOrder &&
+                <p className="text-[14px] text-red-600 italic">Please note that this order is only available for pick up in North West Calgary.</p>
+            }
 
             <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 sm:block sm:mx-auto">
                 Submit Order

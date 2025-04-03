@@ -40,6 +40,20 @@ export const handleOrderSubmission = async (
         return;
     }
 
+    const selectedSizeVariants: Record<string, itemSizeVariation> = {};
+
+    selectedItem.size_variants.forEach((variant: itemSizeVariation) => {
+        if (selectedOrder.variations[variant.id]) {
+            selectedSizeVariants[variant.id] = variant
+        }
+    })
+    
+    if(selectedItem.size_variants.some(variant=>variant.pickupOnly) && data.needsDelivery){
+        toast("This item is only available for pickup in North West Calgary", { error: true });
+        setLoading(false);
+        return;
+    }
+
     // Create variations of size variants
     selectedItem.size_variants.forEach((variant: itemSizeVariation) => {
         if (selectedOrder.variations[variant.id]) {

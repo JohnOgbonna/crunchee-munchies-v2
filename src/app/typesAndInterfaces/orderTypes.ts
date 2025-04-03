@@ -1,14 +1,22 @@
-export enum itemType {
-    chinChin = 'chinChin',
+export enum itemTypes {
+    chinChin = 'chin-chhin',
     buns = 'buns',
-    puffPuff = 'puff-puff'
+    puffPuff = 'puff-puff',
+    meat_pie_fish_roll = 'meat-pies-and-fish-rolls',
 }
-
+export type itemType = {
+    id: number;
+    type: string;        // Example: 'chin-chhin', 'buns'
+    name: string;        // Example: 'Chin Chin', 'Buns'
+    description: string;
+    listOrder: number; // Example: 'Crunchy, delicious Chin Chin snacks'
+};
 export enum itemId {
     chin_chin_standard = 'ch_chin_standard',
     chin_chin_wholesale = 'ch_chin_wholesale',
     chin_chin_event_order = 'ch_chin_event_order',
     chin_chin_bundle = 'ch_chin_bundle',
+    meat_pie_fish_roll = 'meat_pie_fish_roll',
 }
 
 export const itemValues = {
@@ -19,16 +27,17 @@ export const itemValues = {
 };
 
 export type item = {
-    id: itemId
-    type: itemType,
-    name: string,
-    description: string
-    size_variants?: itemSizeVariation[],
-    flavor_variant?: string,
-    mostPopular?: boolean,
-    heroImage: string,
-    listOrder?: number,
-}
+    id: itemId;
+    typeId: number;  // Foreign key referencing `item_types.id`
+    name: string;
+    description: string;
+    size_variants?: itemSizeVariation[];
+    flavor_variant?: string;
+    mostPopular?: boolean;
+    heroImage: string;
+    listOrder?: number;
+    type: itemTypes
+};
 
 export type itemSizeVariation = {
     parentId: itemId
@@ -36,13 +45,14 @@ export type itemSizeVariation = {
     name: string,
     price: number,
     description: string,
-    type: itemType,
+    type: itemTypes,
     minimumQuantity?: number,
     maximumQuantity?: number,
     url?: string,
     savings?: number,
     bundleSize?: number,
     listOrder?: number,
+    pickupOnly?: boolean,
 }
 
 export interface featuredItem {
@@ -74,7 +84,7 @@ export interface Orders extends Record<itemId, {
 
 export interface sendOrder {
     id: itemId
-    type: itemType,
+    type: itemTypes,
     name: string,
     description: string
     flavor_variant?: string,
@@ -91,7 +101,7 @@ export interface sendOrderVariations {
         id: string;
         price: number;
         description: string,
-        type: itemType,
+        type: itemTypes,
         minimumQuantity?: number,
         maximumQuantity?: number,
         url?: string,

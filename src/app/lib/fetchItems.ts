@@ -29,6 +29,8 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
             minimumQuantity: variant.minimum_quantity || undefined,
             savings: variant.savings || undefined,
             bundleSize: variant.bundle_size || undefined,
+            listOrder: variant.list_order || undefined,
+            pickupOnly: variant.pickup_only
         }));
         formattedItems[dbItem.id] = {
             id: dbItem.id,
@@ -38,6 +40,7 @@ export async function fetchItemsFromDB(): Promise<Record<string, item>> {
             size_variants: sizeVariants,
             heroImage: dbItem.hero_image,
             listOrder: dbItem.list_order || undefined,
+            typeId: dbItem.type_id
         };
     });
 
