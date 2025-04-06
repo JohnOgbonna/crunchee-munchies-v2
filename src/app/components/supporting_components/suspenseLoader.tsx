@@ -17,12 +17,12 @@ export default function SuspenseLoader({ isLoading, type }: Props) {
     if (!isLoading) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 h-screen">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 h-[screen]">
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg"
+                className="sm:fixed sm:top-[80%] flex flex-col items-center bg-white p-6 rounded-lg shadow-lg"
             >
                 <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="mt-4 text-gray-700 font-medium">Sending your {type === 'order' ? 'order' : 'message'}...</p>

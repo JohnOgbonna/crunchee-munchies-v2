@@ -4,6 +4,7 @@ import Navbar from "./components/core_components/navbar/navbar";
 import Footer from "./components/core_components/footer/footer";
 import { OrderProvider } from "./context/OrderContext"; // Import OrderProvider
 
+
 export const metadata: Metadata = {
   title: "Crunchee Munchies",
   description: "The Best Chin-chin in The World!",

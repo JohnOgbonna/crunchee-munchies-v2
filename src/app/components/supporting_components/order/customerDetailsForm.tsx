@@ -5,19 +5,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
 import { customerFields, FormDataType, formSchema } from "@/app/data/customerFields";
 import { useOrderContext } from "@/app/context/OrderContext";
-import { itemId } from "@/app/typesAndInterfaces/orderTypes";
-import { submitOrder } from "@/app/actions/submitOrder";
+import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
 import SuspenseLoader from "../suspenseLoader";
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
+import { handleOrderSubmission } from "./handleOrderSubmission";
+
 
 
 interface CustomerDetailsFormProps {
     item: itemId;
+    items: Record<string, item> | undefined;
+    handleClose?: () => void;
 }
 
-const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
+const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
     const {
         register,
         handleSubmit,
@@ -34,7 +37,8 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
     const pathname = usePathname();
     const router = useRouter();
     const { setCustomerData, setFormSubmitted } = useOrderSubmitContext();
-    const handleOrderSuccess = (name: string, email: string) => {
+
+    const handleOrderSuccess = (name: string, email: string, submittedOrderId: string) => {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("item");
 
@@ -43,49 +47,67 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
 
         // ✅ Update state after navigation
         setTimeout(() => {
-            setCustomerData({ name, email });
+            setCustomerData({ name, email, submittedOrderId });
             setFormSubmitted(true);
         }, 100); // Delay ensures state updates don't interfere
     };
 
 
     const onSubmit = async (data: FormDataType) => {
-        setLoading(true);
-        const order = { item, ...orders[item] };
-        try {
-            const response = await submitOrder(data, order);
-
-            if (response?.error) {
-                toast.error(`Order failed: ${response.error}`);
-            } else if (response) {
-                handleOrderSuccess(data.firstName, data.email);
-
-                setTimeout(() => {
-                    reset(); // ✅ Clear form safely after updates
-                    removeOrder(item);
-                }, 150);
-            } else {
-                toast.error("An unknown error occurred.");
-            }
-        } catch (error) {
-            toast.error(`Order failed: ${error}`);
-        } finally {
-            setLoading(false);
-        }
+       
+        await handleOrderSubmission(
+            data,
+            item,
+            items,
+            orders,
+            removeOrder,
+            handleOrderSuccess,
+            reset,
+            setLoading,
+            toast as (message: string, options?: { error?: boolean } | undefined) => void
+        );
     };
 
     const watchedValues = watch();
+    const selectedItem = items?.[item] || null;
+
+    const selectedSizeVariants = useMemo(() => {
+        const variants: Record<string, itemSizeVariation> = {};
+        selectedItem?.size_variants?.forEach((sizeVariant) => {
+            if (orders[item]?.variations?.[sizeVariant.id]) {
+                variants[sizeVariant.id] = sizeVariant;
+            }
+        });
+        return variants;
+    },[selectedItem, orders, item]);
+
+    const pickUpOnlyOrder = useMemo(() => {
+        return Object.values(selectedSizeVariants).some((sizeVariant) => sizeVariant.pickupOnly);
+    },[selectedSizeVariants]);
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border-t-[1px] mt-4 py-4">
-            <Toaster richColors position="bottom-center" closeButton={true} />
+            <Toaster richColors={true} position="bottom-center" closeButton={false} />
             <SuspenseLoader isLoading={isLoading} type="order" />
-            <p className="text-[12px] text-red-600 italic">Note: we prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
+            <p className="text-[12px] text-red-600 italic">Note: We prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
+
+            {pickUpOnlyOrder &&
+                <div>
+                    {
+                        <p className="text-[12px] text-red-600 italic">Note: This order is only available for pick up because of these items:</p>}
+                    {Object.values(selectedSizeVariants).map((sizeVariant) => {
+                        if (sizeVariant.pickupOnly) {
+                            return <p key={sizeVariant.id} className="text-[12px] text-red-600 italic mt-[2px]">{`- ${sizeVariant.name}`}</p>
+                        }
+                    })}
+                </div>
+            }
             <h3 className="text-lg font-semibold">Your Information</h3>
 
             {Object.values(customerFields).map((field) => {
                 if (field.dependsOn && !watchedValues[field.dependsOn as keyof FormDataType]) return null;
-
+                if (field.id === "needsDelivery" && pickUpOnlyOrder) return null
                 return (
                     <div key={field.id} className="flex flex-col">
                         {field.inputType !== "checkbox" && (
@@ -141,6 +163,10 @@ const CustomerDetailsForm = ({ item }: CustomerDetailsFormProps) => {
                     </div>
                 );
             })}
+            {
+                pickUpOnlyOrder &&
+                <p className="text-[14px] text-red-600 italic">Please note that this order is only available for pick up in North West Calgary.</p>
+            }
 
             <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 sm:block sm:mx-auto">
                 Submit Order

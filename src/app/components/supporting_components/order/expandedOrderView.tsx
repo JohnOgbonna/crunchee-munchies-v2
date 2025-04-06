@@ -1,19 +1,18 @@
 'use client';
 
-import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
-import { shopLinks, itemDataMap } from "@/app/data/items";
+import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 import CloseIcon from "../icons/close";
 import { useOrderContext } from "@/app/context/OrderContext";
 import Link from "next/link";
-
 import CustomerDetailsForm from "./customerDetailsForm";
 import Image from "next/image";
-
+import { useMemo } from "react";
 
 
 interface ExpandedOrderViewProps {
   selectedItemId: itemId;
   handleClose: () => void;
+  items: Record<string, item> | undefined;
   orders: {
     [id in itemId]?: {
       variations: {
@@ -25,19 +24,29 @@ interface ExpandedOrderViewProps {
   };
 }
 
-const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, orders, handleClose }) => {
+const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, orders, handleClose, items }) => {
   const { clearItemVariation } = useOrderContext();
 
   const selectedOrder = orders[selectedItemId];
 
-  const selectedItem = itemDataMap[shopLinks[selectedItemId] as keyof typeof itemDataMap];
-  const variations: { [variantId: string]: itemSizeVariation } = {};
-  selectedItem.size_variants?.forEach(variation => {
-    variations[variation.id] = variation;
-  });
+  const selectedItem = items?.[selectedItemId] || null;
+
+  const variations = useMemo(() => {
+    const returnVal: { [variantId: string]: itemSizeVariation } = {}
+    if (!items || !selectedItem)
+      return returnVal;
+    
+    if (selectedItem && selectedItem.size_variants) {
+      selectedItem.size_variants.forEach(variation => {
+        returnVal[variation.id] = variation;
+      }
+      );
+    }
+    return returnVal;
+  }, [items, selectedItem]);
+
 
   let orderTotal = 0;
-
 
   return (
     <div className="p-4 sm:pt-[60px] md:border md:shadow-md w-full sm:overflow-y-scroll">
@@ -45,7 +54,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
         <button onClick={handleClose} className="bg-gray-200 p-2 rounded-full hover:bg-gray-300">
           <CloseIcon size={24} />
         </button>
-        <h3 className="text-lg font-semibold text-center">{`${selectedItem.name} Order Summary`}</h3>
+        <h3 className="text-lg font-semibold text-center">{`${selectedItem?.name} Order Summary`}</h3>
       </div>
       <>
         <ul className="space-y-3">
@@ -55,7 +64,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
             orderTotal += itemTotal;
             return (
               <li key={variantId} className="flex items-center justify-between border-b pb-2">
-                <Image src={variation.url || selectedItem.heroImage} alt={variation.name} className="w-16 h-16 object-cover rounded" width={64} height={64} />
+                <Image src={variation.url || selectedItem?.heroImage || 'image'} alt={variation.name} className="w-16 h-16 object-cover rounded" width={64} height={64} />
                 <div className="flex items-center gap-4 sm:text-sm">
                   <p className="font-semibold">{variation.name}</p>
                   <p className="font-semibold text-gray-700">{`$${variation.price.toFixed(2)} x ${orderItem.quantity}`}</p>
@@ -76,11 +85,11 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
         </ul>
         <div className="flex gap-4 items-center justify-center mb-10 mt-4">
           <h4 className="text-lg font-bold text-center">Total: ${orderTotal.toFixed(2)}</h4>
-          <Link href={`/shop/${shopLinks[selectedItemId]}${selectedOrder && Object.keys(selectedOrder.variations).length > 0 ? `?variant=${Object.keys(selectedOrder.variations)[0]}` : ''}`} className="block text-center text-blue-600 hover:text-blue-800 font-bold underline">
+          <Link href={`/shop/${selectedItem?.id}${selectedOrder && Object.keys(selectedOrder.variations).length > 0 ? `?variant=${Object.keys(selectedOrder.variations)[0]}` : ''}`} className="block text-center text-blue-600 hover:text-blue-800 font-bold underline">
             Edit
           </Link>
         </div>
-        <CustomerDetailsForm item={selectedItemId} />
+        <CustomerDetailsForm item={selectedItemId} items = {items} handleClose={handleClose} />
       </>
 
     </div>

@@ -1,15 +1,24 @@
-export enum itemType {
-    chinChin = 'chinChin',
+export enum itemTypes {
+    chinChin = 'chin-chhin',
     buns = 'buns',
-    puffPuff = 'puff-puff'
+    puffPuff = 'puff-puff',
+    meat_pie_fish_roll = 'meat-pies-and-fish-rolls',
+}
+export type itemType = {
+    id: number;
+    type: string;        // Example: 'chin-chhin', 'buns'
+    name: string;        // Example: 'Chin Chin', 'Buns'
+    description: string;
+    listOrder: number; // Example: 'Crunchy, delicious Chin Chin snacks'
+};
+export enum itemId {
+    chin_chin_standard = 'ch_chin_standard',
+    chin_chin_wholesale = 'ch_chin_wholesale',
+    chin_chin_event_order = 'ch_chin_event_order',
+    chin_chin_bundle = 'ch_chin_bundle',
+    meat_pie_fish_roll = 'meat_pie_fish_roll',
 }
 
-export enum itemId {
-    chin_chin_standard = 'ch-1',
-    chin_chin_wholesale = 'ch-w',
-    chin_chin_event_order = 'ch-sp',
-    chin_chin_bundle = 'ch-b',
-}
 export const itemValues = {
     [itemId.chin_chin_standard]: 'ch-1',
     [itemId.chin_chin_wholesale]: 'ch-w',
@@ -18,15 +27,17 @@ export const itemValues = {
 };
 
 export type item = {
-    id: itemId
-    type: itemType,
-    name: string,
-    description: string
-    size_variants?: itemSizeVariation[],
-    flavor_variant?: string,
-    mostPopular?: boolean,
-    heroImage: string
-}
+    id: itemId;
+    typeId: number;  // Foreign key referencing `item_types.id`
+    name: string;
+    description: string;
+    size_variants?: itemSizeVariation[];
+    flavor_variant?: string;
+    mostPopular?: boolean;
+    heroImage: string;
+    listOrder?: number;
+    type: itemTypes
+};
 
 export type itemSizeVariation = {
     parentId: itemId
@@ -34,12 +45,14 @@ export type itemSizeVariation = {
     name: string,
     price: number,
     description: string,
-    type: itemType,
+    type: itemTypes,
     minimumQuantity?: number,
     maximumQuantity?: number,
     url?: string,
     savings?: number,
-    bundleSize?: number
+    bundleSize?: number,
+    listOrder?: number,
+    pickupOnly?: boolean,
 }
 
 export interface featuredItem {
@@ -70,11 +83,31 @@ export interface Orders extends Record<itemId, {
 }
 
 export interface sendOrder {
-    item: itemId,
-    variations: {
-        [variantId: string]: {
-            quantity: number;
-        };
+    id: itemId
+    type: itemTypes,
+    name: string,
+    description: string
+    flavor_variant?: string,
+    mostPopular?: boolean,
+    heroImage: string,
+    listOrder?: number,
+    variations: sendOrderVariations
+}
+
+export interface sendOrderVariations {
+    [variantId: string]: {
+        quantity: number;
+        name: string;
+        id: string;
+        price: number;
+        description: string,
+        type: itemTypes,
+        minimumQuantity?: number,
+        maximumQuantity?: number,
+        url?: string,
+        savings?: number,
+        bundleSize?: number,
+        listOrder?: number,
     };
 }
 
@@ -90,6 +123,6 @@ export interface OrderContextType {
 export interface OrderSubmitContextType {
     formSubmitted: boolean;
     setFormSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    customerData: { name: string; email: string };
-    setCustomerData: React.Dispatch<React.SetStateAction<{ name: string; email: string }>>;
+    customerData: { name: string; email: string, submittedOrderId: string };
+    setCustomerData: React.Dispatch<React.SetStateAction<{ name: string; email: string, submittedOrderId: string }>>;
 }

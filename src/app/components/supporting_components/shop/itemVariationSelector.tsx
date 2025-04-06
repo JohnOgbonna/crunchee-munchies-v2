@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
+import { itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderTypes";
 
 interface ItemVariationSelectorProps {
-    itemId: string;
+    itemId: itemId;
     variations: itemSizeVariation[];
     selectedVariantId: string;
 }
