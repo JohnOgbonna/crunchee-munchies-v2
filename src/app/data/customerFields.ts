@@ -117,7 +117,7 @@ export const formSchema = z.object({
     email: z.string().email("Invalid email format"),
     phone: z.string().min(10, "Phone number is required"),
     notes: z.string().optional(),
-    needsDelivery: z.boolean(),
+    needsDelivery: z.boolean().default(false),
     streetAddress: z.string().optional(),
     city: z.string().optional(),
     province: z.string().optional(),

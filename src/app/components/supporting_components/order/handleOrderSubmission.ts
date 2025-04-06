@@ -9,11 +9,12 @@ export const handleOrderSubmission = async (
     items: Record<string, item> | undefined,
     orders: Orders,
     removeOrder: (id: itemId) => void,
-    handleOrderSuccess: (name: string, email: string) => void,
+    handleOrderSuccess: (name: string, email: string, submittedOrderId: string) => void,
     reset: () => void,
     setLoading: (loading: boolean) => void,
     toast: (message: string, options?: { error?: boolean } | undefined) => void
 ) => {
+    console.log('starting order submission');
     setLoading(true);
     const selectedOrder = orders[item];
 
@@ -47,7 +48,7 @@ export const handleOrderSubmission = async (
             selectedSizeVariants[variant.id] = variant
         }
     })
-    
+
     if(selectedItem.size_variants.some(variant=>variant.pickupOnly) && data.needsDelivery){
         toast("This item is only available for pickup in North West Calgary", { error: true });
         setLoading(false);
@@ -91,7 +92,7 @@ export const handleOrderSubmission = async (
         if (response?.error) {
             toast(`Order failed: ${response.error}`, { error: true });
         } else if (response) {
-            handleOrderSuccess(data.firstName, data.email);
+            handleOrderSuccess(data.firstName, data.email, response.orderId ? response.orderId : "");
 
             setTimeout(() => {
                 reset(); // ✅ Clear form safely after updates

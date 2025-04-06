@@ -4,7 +4,7 @@ import ExpandedOrderView from "../components/supporting_components/order/expande
 import { useOrderContext } from "@/app/context/OrderContext";
 import { item, itemId } from "@/app/typesAndInterfaces/orderTypes";
 import OrderSummary from "../components/supporting_components/order/orderSummary";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, use, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { OrderSubmitProvider, useOrderSubmitContext } from "../context/OrderSubmitContext";
 import Confirmation from "../components/supporting_components/confirmation";
@@ -76,11 +76,16 @@ const OrderPageContent = () => {
 
     const handleSummaryClose = () => {
         setFormSubmitted(false);
-        setCustomerData({ name: '', email: '' });
+        setCustomerData({ name: '', email: '', submittedOrderId: '' });
     }
+
+    const finalOrder : boolean = useMemo(() => {
+        return Object.keys(orders).find(id => id !== selectedItem) ? false : true;
+    }, [orders, selectedItem]);
+
     return (
         <div className="p-4 mx-auto max-w-[1440px]">
-            {formSubmitted && customerData && <Confirmation handleClose={handleSummaryClose} customerData={customerData} type="order" />}
+            {formSubmitted && customerData && <Confirmation handleItemClose = {handleClose} handleClose={handleSummaryClose} customerData={customerData} type="order" finalOrder={finalOrder} />}
             <h2 className="text-xl font-semibold mb-4 text-slate-700">
                 Select Order to Complete:
             </h2>

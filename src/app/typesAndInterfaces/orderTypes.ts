@@ -123,6 +123,6 @@ export interface OrderContextType {
 export interface OrderSubmitContextType {
     formSubmitted: boolean;
     setFormSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    customerData: { name: string; email: string };
-    setCustomerData: React.Dispatch<React.SetStateAction<{ name: string; email: string }>>;
+    customerData: { name: string; email: string, submittedOrderId: string };
+    setCustomerData: React.Dispatch<React.SetStateAction<{ name: string; email: string, submittedOrderId: string }>>;
 }

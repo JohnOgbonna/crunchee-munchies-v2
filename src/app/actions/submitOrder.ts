@@ -1,46 +1,71 @@
 "use server";
 
+import { generateOrderId } from "./functions";
+import { saveOrderToDatabase } from "./saveOrderToDatabase";
+import { sendOrderEmail } from "./sendOrderEmail";
 import { FormDataType } from "../data/customerFields";
 import { sendOrder } from "../typesAndInterfaces/orderTypes";
-import fs from "fs/promises";
-
-const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_ORDER_URL as string; // Lambda function URL
-const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string; // access key
 
 export async function submitOrder(customer: FormDataType, order: sendOrder) {
     try {
-        // Ensure there is a valid order
         if (!order || Object.keys(order).length === 0) {
             throw new Error("No order found.");
         }
 
-        if (!order || Object.keys(order.variations).length === 0) {
+        if (!order.variations || Object.keys(order.variations).length === 0) {
             throw new Error("Order must contain at least one variation.");
         }
 
-        // Construct payload for Lambda function
-        const payload = {
-            customer,
-            order,
-        };
+        // 🔹 Generate Order ID first
+        const orderId = generateOrderId();
 
-        //Send request to AWS Lambda
-        const response = await fetch(LAMBDA_ENDPOINT as string, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Secret-Access-Key": SECRET_ACCESS_KEY,
-            },
-            body: JSON.stringify(payload),
-        });
+        // 🔹 Save order to database (pass generated orderId)
+        await saveOrderToDatabase(orderId, customer, order);
 
-        if (!response.ok) {
-            throw new Error(`Order request failed: ${response.statusText}`);
-        }
+        // 🔹 Send order email (ensure email also references orderId)
+       await sendOrderEmail(orderId, customer, order);
 
-        return await response.json(); // Return Lambda response
+        return { orderId};
     } catch (error) {
         console.error("Error submitting order:", error);
         return { error: (error as Error).message };
     }
 }
+
+// //export async function submitOrder(customer: FormDataType, order: sendOrder) {
+//     try {
+//         // Ensure there is a valid order
+//         if (!order || Object.keys(order).length === 0) {
+//             throw new Error("No order found.");
+//         }
+
+//         if (!order || Object.keys(order.variations).length === 0) {
+//             throw new Error("Order must contain at least one variation.");
+//         }
+
+//         // Construct payload for Lambda function
+//         const payload = {
+//             customer,
+//             order,
+//         };
+
+//         //Send request to AWS Lambda
+//         const response = await fetch(LAMBDA_ENDPOINT as string, {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 "X-Secret-Access-Key": SECRET_ACCESS_KEY,
+//             },
+//             body: JSON.stringify(payload),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`Order request failed: ${response.statusText}`);
+//         }
+
+//         return await response.json(); // Return Lambda response
+//     } catch (error) {
+//         console.error("Error submitting order:", error);
+//         return { error: (error as Error).message };
+//     }
+// }

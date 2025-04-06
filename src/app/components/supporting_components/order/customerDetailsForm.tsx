@@ -9,13 +9,15 @@ import { item, itemId, itemSizeVariation } from "@/app/typesAndInterfaces/orderT
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useOrderSubmitContext } from "@/app/context/OrderSubmitContext";
 import SuspenseLoader from "../suspenseLoader";
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { handleOrderSubmission } from "./handleOrderSubmission";
+
 
 
 interface CustomerDetailsFormProps {
     item: itemId;
     items: Record<string, item> | undefined;
+    handleClose?: () => void;
 }
 
 const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
@@ -36,7 +38,7 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
     const router = useRouter();
     const { setCustomerData, setFormSubmitted } = useOrderSubmitContext();
 
-    const handleOrderSuccess = (name: string, email: string) => {
+    const handleOrderSuccess = (name: string, email: string, submittedOrderId: string) => {
         const params = new URLSearchParams(searchParams.toString());
         params.delete("item");
 
@@ -45,13 +47,14 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
 
         // ✅ Update state after navigation
         setTimeout(() => {
-            setCustomerData({ name, email });
+            setCustomerData({ name, email, submittedOrderId });
             setFormSubmitted(true);
         }, 100); // Delay ensures state updates don't interfere
     };
 
 
     const onSubmit = async (data: FormDataType) => {
+       
         await handleOrderSubmission(
             data,
             item,
@@ -66,21 +69,26 @@ const CustomerDetailsForm = ({ item, items }: CustomerDetailsFormProps) => {
     };
 
     const watchedValues = watch();
-    const selectedSizeVariants: Record<string, itemSizeVariation> = {};
     const selectedItem = items?.[item] || null;
 
-    if (selectedItem) {
-        selectedItem.size_variants?.forEach((sizeVariant) => {
+    const selectedSizeVariants = useMemo(() => {
+        const variants: Record<string, itemSizeVariation> = {};
+        selectedItem?.size_variants?.forEach((sizeVariant) => {
             if (orders[item]?.variations?.[sizeVariant.id]) {
-                selectedSizeVariants[sizeVariant.id] = sizeVariant;
+                variants[sizeVariant.id] = sizeVariant;
             }
         });
-    }
-    const pickUpOnlyOrder = Object.values(selectedSizeVariants).some((sizeVariant) => sizeVariant.pickupOnly);
+        return variants;
+    },[selectedItem, orders, item]);
+
+    const pickUpOnlyOrder = useMemo(() => {
+        return Object.values(selectedSizeVariants).some((sizeVariant) => sizeVariant.pickupOnly);
+    },[selectedSizeVariants]);
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border-t-[1px] mt-4 py-4">
-            <Toaster richColors position="bottom-center" closeButton={true} />
+            <Toaster richColors={true} position="bottom-center" closeButton={false} />
             <SuspenseLoader isLoading={isLoading} type="order" />
             <p className="text-[12px] text-red-600 italic">Note: We prepare and package every order individually. Once we approve your order, we will send you a follow up email and the details about how you can pick up your order and make payment.</p>
 

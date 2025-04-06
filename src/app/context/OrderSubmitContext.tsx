@@ -7,7 +7,7 @@ const OrderSubmitContext = createContext<OrderSubmitContextType | null>(null);
 
 export const OrderSubmitProvider = ({ children }: { children: React.ReactNode }) => {
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-    const [customerData, setCustomerData] = useState<{ name: string, email: string }>({ name: '', email: '' });
+    const [customerData, setCustomerData] = useState<{ name: string, email: string, submittedOrderId: string }>({ name: '', email: '', submittedOrderId: '' });
 
     return (
         <OrderSubmitContext.Provider value={{ formSubmitted, setFormSubmitted, customerData, setCustomerData }}>

@@ -89,7 +89,7 @@ const ExpandedOrderView: React.FC<ExpandedOrderViewProps> = ({ selectedItemId, o
             Edit
           </Link>
         </div>
-        <CustomerDetailsForm item={selectedItemId} items = {items} />
+        <CustomerDetailsForm item={selectedItemId} items = {items} handleClose={handleClose} />
       </>
 
     </div>
