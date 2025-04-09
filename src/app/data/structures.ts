@@ -24,6 +24,12 @@ export const navSections = {
     connect: 'Connect',
 }
 
+export const adminNavSections = {
+    orders: 'Orders',
+    items: 'Items',
+    account: 'Account',
+}
+
 export const navSubsections: NavSubsections = {
     shop: {
         [itemDataMap.chin_chin_standard.name]: {

@@ -1,3 +1,5 @@
+import { TableInstance, UsePaginationInstanceProps, UsePaginationState } from "react-table";
+
 export enum itemTypes {
     chinChin = 'chin-chhin',
     buns = 'buns',
@@ -125,4 +127,52 @@ export interface OrderSubmitContextType {
     setFormSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     customerData: { name: string; email: string, submittedOrderId: string };
     setCustomerData: React.Dispatch<React.SetStateAction<{ name: string; email: string, submittedOrderId: string }>>;
+}
+export interface OrderType {
+    id: string;  // Order ID
+    customer_name: string;  // Customer's full name
+    email: string;  // Customer's email
+    needs_delivery: boolean;  // Whether the order requires delivery
+    paid: boolean | null;  // Payment status, null if unknown
+    created_at: string | null;  // Timestamp of when the order was created
+    last_modified: string | null;  // Timestamp of when the order was last modified
+    last_modified_by: string | null;  // User who last modified the order
+    phone_number: string | null;  // Customer's phone number
+    address: string | null;  // Delivery address
+    postal_code: string | null;  // Postal code
+    province_state: string | null;  // Province or state
+    notes: string | null;  // Additional notes from the customer
+    city: string | null;  // City of the customer
+    status: string | null;  // Status of the order (e.g., "pending", "completed")
+  }
+  
+  // Represents an individual item in an order
+  export interface OrderItemType {
+    id: string;  // Order item ID
+    order_id: string;  // Reference to the associated order
+    variant_id: string;  // Variant ID for the product in the order
+    quantity: number;  // Quantity of the item ordered
+    notes: string | null;  // Notes for the order item (if any)
+  }
+  
+  // Represents the entire order along with the items
+  export interface OrderWithItemsType {
+    order: OrderType;  // Main order details
+    items: OrderItemType[];  // List of items within the order
+  }
+
+export type TableInstanceWithPagination<T extends object> = TableInstance<T> &
+    UsePaginationInstanceProps<T> & {
+        state: UsePaginationState<T>;
+    };
+
+
+export interface OrderTableProps {
+    orders: OrderType[];
+    loading: boolean;
+    totalOrders: number;
+    pageIndex: number;
+    pageSize: number;
+    setPageIndex: (pageIndex: number) => void;
+    setPageSize: (pageSize: number) => void;
 }

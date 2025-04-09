@@ -6,8 +6,7 @@ import { sendOrder } from "../typesAndInterfaces/orderTypes";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function saveOrderToDatabase(orderId: string, customer: FormDataType, order: sendOrder) {
     try {
@@ -32,8 +31,7 @@ export async function saveOrderToDatabase(orderId: string, customer: FormDataTyp
         if (orderError) throw orderError;
 
         // Insert order items into `order_items` table
-        const orderItems = Object.values(order.variations).map((variant, index) => ({
-            id: `${orderId}-${index + 1}`, // Unique ID for each order item
+        const orderItems = Object.values(order.variations).map((variant) => ({
             order_id: orderId, // Use the passed orderId
             variant_id: variant.id,
             quantity: variant.quantity,
