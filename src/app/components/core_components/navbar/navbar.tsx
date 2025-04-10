@@ -22,7 +22,6 @@ function NavbarComponent() {
     const [hoveredSection, setHoveredSection] = useState<string | null>(null);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [items, setItems] = useState<Record<string, item> | undefined>(undefined);
-
     const pathname = usePathname();
     const isAdminPath = pathname.startsWith("/admin");
 
@@ -150,8 +149,9 @@ function NavbarComponent() {
 }
 
 export default function Navbar() {
-
-    return (
+    const pathname = usePathname();
+    const isCheckingOrder = pathname.startsWith("/orders");
+    return !isCheckingOrder && (
         <Suspense fallback={<div>Loading...</div>}>
             <NavbarComponent />
         </Suspense>

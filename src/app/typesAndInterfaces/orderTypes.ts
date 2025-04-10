@@ -144,28 +144,28 @@ export interface OrderType {
     notes: string | null;  // Additional notes from the customer
     city: string | null;  // City of the customer
     status: string | null;  // Status of the order (e.g., "pending", "completed")
-  }
-  
-  // Represents an individual item in an order
-  export interface OrderItemType {
+}
+
+// Represents an individual item in an order
+export interface OrderItemType {
     id: string;  // Order item ID
-    order_id: string;  // Reference to the associated order
-    variant_id: string;  // Variant ID for the product in the order
+    // Reference to the associated order
+    variant: itemSizeVariation, // Variant ID for the product in the order
     quantity: number;  // Quantity of the item ordered
     notes: string | null;  // Notes for the order item (if any)
-  }
-  
-  // Represents the entire order along with the items
-  export interface OrderWithItemsType {
+    parent : item,
+}
+
+// Represents the entire order along with the items
+export interface OrderWithItemsType {
     order: OrderType;  // Main order details
     items: OrderItemType[];  // List of items within the order
-  }
+}
 
 export type TableInstanceWithPagination<T extends object> = TableInstance<T> &
     UsePaginationInstanceProps<T> & {
         state: UsePaginationState<T>;
     };
-
 
 export interface OrderTableProps {
     orders: OrderType[];
@@ -175,4 +175,24 @@ export interface OrderTableProps {
     pageSize: number;
     setPageIndex: (pageIndex: number) => void;
     setPageSize: (pageSize: number) => void;
+    searchTerm?: string; // optional, in case you want to show "Results for ..."
+}
+
+export interface fetchedOrder {
+    id: string;                // Order ID
+    customer_name: string;     // Name of the customer
+    email: string;             // Customer email
+    needs_delivery: boolean;   // Whether the order needs delivery
+    paid: boolean | null;      // Payment status
+    created_at: string;        // Order creation timestamp
+    last_modified: string | null; // Last modified timestamp
+    last_modified_by: string | null; // Last user who modified the order
+    phone_number: string | null; // Customer's phone number
+    address: string | null;    // Delivery address
+    postal_code: string | null; // Postal code for delivery
+    province_state: string | null; // Province or state for delivery
+    notes: string | null;      // Optional order notes
+    city: string | null;       // City for delivery
+    status: string | null;     // Order status (e.g., 'pending', 'completed')
+    order_items: OrderItemType[]; // Associated order items
 }

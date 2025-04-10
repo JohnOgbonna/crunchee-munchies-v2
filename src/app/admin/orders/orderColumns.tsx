@@ -39,6 +39,7 @@ export const getOrderColumns = (router: ReturnType<typeof useRouter>): Column<Or
   {
     Header: 'Created At',
     accessor: 'created_at',
+    Cell: ({ value }) => (new Date(value as string).toLocaleString()),
   },
   {
     Header: 'Paid',

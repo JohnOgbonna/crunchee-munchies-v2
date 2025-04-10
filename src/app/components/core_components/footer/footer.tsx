@@ -1,11 +1,16 @@
 'use client';
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { navSections } from "@/app/data/structures";
 
-
 const Footer = () => {
+    const pathname = usePathname();
+
+    // Don't render footer on admin paths
+    if (pathname.startsWith("/admin")) return null;
+
     return (
         <footer className="w-full bg-primary text-slate-700 py-8 px-4 md:px-12 lg:px-20 bg-[#f5e3c5] mt-12">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between gap-8 text-center md:text-left">
@@ -19,8 +24,16 @@ const Footer = () => {
                         initial="hidden"
                         whileInView={"visible"}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.7, ease: "easeInOut", x: { type: "spring", stiffness: 30 }, opacity: { duration: .8, delay: 0.2, ease: "easeInOut" } }}
-                    >Crunchee Munchies</motion.h2>
+                        transition={{
+                            duration: 0.5,
+                            delay: 0.7,
+                            ease: "easeInOut",
+                            x: { type: "spring", stiffness: 30 },
+                            opacity: { duration: .8, delay: 0.2, ease: "easeInOut" }
+                        }}
+                    >
+                        Crunchee Munchies
+                    </motion.h2>
                     <p className="text-sm mt-2">
                         The best Chin Chin in the world.
                     </p>
@@ -51,6 +64,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+
             {/* Send us a message */}
             <div className="text-center mt-8 text-lg font-semibold cursor-pointer hover:underline hover:scale-105 transition-all ease-out duration-300">
                 <Link href="/connect#contact_message" className="hover:underline">Send Us a Message</Link>
