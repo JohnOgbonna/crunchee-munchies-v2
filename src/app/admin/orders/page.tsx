@@ -5,6 +5,8 @@ import { fetchOrdersForAdmin } from '@/app/actions/fetchOrderForAdmin';
 import { OrderType } from '@/app/typesAndInterfaces/orderTypes';
 import OrderTable from './ordersTable';
 import OrderSearchBar from './orderSearchBar';
+import { validateCognitoToken } from '@/app/lib/auth/validateCognitoToken';
+import router from 'next/router';
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<OrderType[]>([]);
@@ -14,6 +16,19 @@ export default function AdminOrdersPage() {
     const [pageSize, setPageSize] = useState(10);
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [validationFailed, setValidationFailed] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('cognitoToken');
+        if (!token) {
+            router.push('/admin'); // redirect to login
+        }
+        else if (!validateCognitoToken(token)) {
+            setValidationFailed(() => true);
+            localStorage.removeItem('cognitoToken');
+        }
+
+    }, [router]);
 
     useEffect(() => {
         async function fetchOrders() {
@@ -38,7 +53,20 @@ export default function AdminOrdersPage() {
         );
     }, [orders, searchTerm]);
 
-    return (
+    if (validationFailed) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen text-slate-800">
+                <h1 className="text-2xl font-bold mb-4">Invalid Token</h1>
+                <p className="text-lg">Please sign in again.</p>
+            </div>
+        );
+    }
+    else if (loading) return (
+        <div className="flex flex-col items-center justify-center min-h-screen text-slate-800">
+            <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+        </div>
+    );
+    else return (
         <div className="min-h-screen bg-[#fff9f2] p-4 text-slate-800">
             <h1 className="text-3xl font-bold mb-4 text-primary">Admin Orders</h1>
 

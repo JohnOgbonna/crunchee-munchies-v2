@@ -6,16 +6,16 @@ import React from 'react';
 import { ArrowUp, ArrowDown, ChevronsUpDown } from 'lucide-react';
 import { getOrderColumns } from './orderColumns';
 import {
-    useTable,
-    usePagination,
-    useSortBy,
-    TableInstance,
-    UsePaginationState,
-    UsePaginationInstanceProps,
-    Column,
-  } from 'react-table';
+  useTable,
+  usePagination,
+  useSortBy,
+  TableInstance,
+  UsePaginationState,
+  UsePaginationInstanceProps,
+  Column,
+} from 'react-table';
 
-  type TableInstanceWithPagination<T extends object> = TableInstance<T> &
+type TableInstanceWithPagination<T extends object> = TableInstance<T> &
   UsePaginationInstanceProps<T> & {
     state: UsePaginationState<T>;
   };
@@ -64,54 +64,68 @@ const OrderTable: React.FC<OrderTableProps> = ({
               className="w-full table-auto border-collapse min-w-[600px]"
             >
               <thead className="bg-slate-100">
-                {headerGroups.map(headerGroup => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map(column => (
-                      <th
-                      //@ts-ignore
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        className="px-4 py-3 border-b text-left md:text-sm font-medium text-slate-700 whitespace-nowrap cursor-pointer"
-                      >
-                        <div className="flex items-center gap-1">
-                          {column.render('Header')}
-                         { /*@ts-ignore*/}
-                          {!column.disableSortBy && (
-                            <>
-                            {/* @ts-ignore: Suppress TypeScript error for isSorted */}
-                              {column.isSorted ? (
-                                // @ts-ignore: Suppress TypeScript error for isSortedDesc
-                                column.isSortedDesc ? (
-                                  <ArrowDown size={14} />
-                                ) : (
-                                  <ArrowUp size={14} />
-                                )
-                              ) : (
-                                <ChevronsUpDown size={14} className="text-slate-400" />
+                {headerGroups.map((headerGroup) => {
+                  // @ts-ignore: Suppress TypeScript error for getHeaderGroupProps
+                  const { key, ...rest } = headerGroup.getHeaderGroupProps(); // Extract "key"
+                  return (
+                    <tr key={key} {...rest}> {/* Pass "key" explicitly */}
+                      {headerGroup.headers.map((column) => {
+                        // @ts-ignore: Suppress TypeScript error for getHeaderProps and getSortByToggleProps
+                        const { key: columnKey, ...columnRest } = column.getHeaderProps(column.getSortByToggleProps());
+                        return (
+                          <th
+                            key={columnKey} // Pass "key" explicitly
+                            {...columnRest} // Spread remaining props
+                            className="px-4 py-3 border-b text-left md:text-sm font-medium text-slate-700 whitespace-nowrap cursor-pointer"
+                          >
+                            <div className="flex items-center gap-1">
+                              {/* @ts-ignore: Suppress TypeScript error for render */}
+                              {column.render('Header')}
+                              {/* @ts-ignore: Suppress TypeScript error for disableSortBy */}
+                              {!column.disableSortBy && (
+                                <>
+                                  {/* @ts-ignore: Suppress TypeScript error for isSorted and isSortedDesc */}
+                                  {column.isSorted ? (
+                                    // @ts-ignore: Suppress TypeScript error for isSortedDesc
+                                    column.isSortedDesc ? (
+                                      <ArrowDown size={14} />
+                                    ) : (
+                                      <ArrowUp size={14} />
+                                    )
+                                  ) : (
+                                    <ChevronsUpDown size={14} className="text-slate-400" />
+                                  )}
+                                </>
                               )}
-                            </>
-                          )}
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+                            </div>
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
               </thead>
               <tbody {...getTableBodyProps()}>
-                {rows.map(row => {
+                {rows.map((row) => {
                   prepareRow(row);
+                  // @ts-ignore: Suppress TypeScript error for getRowProps
+                  const { key, ...rest } = row.getRowProps(); // Extract "key"
                   return (
-                    <tr
-                      {...row.getRowProps()}
-                      className="hover:bg-slate-50 transition"
-                    >
-                      {row.cells.map(cell => (
-                        <td
-                          {...cell.getCellProps()}
-                          className="px-4 py-3 border-b md:text-sm whitespace-nowrap"
-                        >
-                          {cell.render('Cell')}
-                        </td>
-                      ))}
+                    <tr key={key} {...rest} className="hover:bg-slate-50 transition"> {/* Pass "key" explicitly */}
+                      {row.cells.map((cell) => {
+                        // @ts-ignore: Suppress TypeScript error for getCellProps
+                        const { key: cellKey, ...cellRest } = cell.getCellProps(); // Extract "key"
+                        return (
+                          <td
+                            key={cellKey} // Pass "key" explicitly
+                            {...cellRest} // Spread remaining props
+                            className="px-4 py-3 border-b md:text-sm whitespace-nowrap"
+                          >
+                            {/* @ts-ignore: Suppress TypeScript error for render */}
+                            {cell.render('Cell')}
+                          </td>
+                        );
+                      })}
                     </tr>
                   );
                 })}

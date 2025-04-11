@@ -35,7 +35,6 @@ import {
     
     try {
       const response = await client.send(command);
-      console.log(response)
       const idToken = response.AuthenticationResult?.IdToken;
       if (!idToken) throw new Error('Token not received');
       return idToken;

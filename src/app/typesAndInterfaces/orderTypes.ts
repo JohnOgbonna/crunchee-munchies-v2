@@ -176,6 +176,7 @@ export interface OrderTableProps {
     setPageIndex: (pageIndex: number) => void;
     setPageSize: (pageSize: number) => void;
     searchTerm?: string; // optional, in case you want to show "Results for ..."
+    isAdmin?: boolean
 }
 
 export interface fetchedOrder {

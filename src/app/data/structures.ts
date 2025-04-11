@@ -1,4 +1,6 @@
+import { sign } from "crypto";
 import { itemDataMap } from "./items"
+import { signOut } from "../lib/cognitoAuth";
 
 
 export interface NavSubsections {
@@ -28,6 +30,7 @@ export const adminNavSections = {
     orders: 'Orders',
     items: 'Items',
     account: 'Account',
+    signOut: 'Sign Out',
 }
 
 export const navSubsections: NavSubsections = {
