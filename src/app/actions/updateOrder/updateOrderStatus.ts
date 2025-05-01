@@ -1,7 +1,7 @@
 "use server";
 
 import { secureSupabase } from "@/utils/supabase";
-import { triggerStatusUpdateEmail } from "@/app/lib/email/triggerStatusUpdateEmail"; // You’ll implement this Lambda hook later
+import { toast } from "sonner";
 
 export async function updateOrderStatus(orderId: string, newStatus: string) {
   try {
@@ -24,7 +24,7 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
 
     return { success: true };
   } catch (err) {
-    console.error("Failed to update order status:", err);
+    console.log("Failed to update order status:", err);
     return { success: false, message: "Could not update order status." };
   }
 }

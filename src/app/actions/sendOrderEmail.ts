@@ -4,7 +4,7 @@ import { FormDataType } from "../data/customerFields";
 import { sendOrder } from "../typesAndInterfaces/orderTypes";
 
 const LAMBDA_ENDPOINT = process.env.NEXT_LAMBDA_ORDER_URL as string;
-const SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string;
+const STATUS_SECRET_ACCESS_KEY = process.env.NEXT_API_SECRET_ACCESS_KEY as string;
 
 export async function sendOrderEmail(orderId: string, customer: FormDataType, order: sendOrder) {
     try {
@@ -19,7 +19,7 @@ export async function sendOrderEmail(orderId: string, customer: FormDataType, or
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Secret-Access-Key": SECRET_ACCESS_KEY,
+                "x-secret-access-key": STATUS_SECRET_ACCESS_KEY,
             },
             body: JSON.stringify(payload),
         });

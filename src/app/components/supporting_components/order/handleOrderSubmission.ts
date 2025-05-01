@@ -14,7 +14,6 @@ export const handleOrderSubmission = async (
     setLoading: (loading: boolean) => void,
     toast: (message: string, options?: { error?: boolean } | undefined) => void
 ) => {
-    console.log('starting order submission');
     setLoading(true);
     const selectedOrder = orders[item];
 

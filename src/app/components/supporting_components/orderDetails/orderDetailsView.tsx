@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import { fetchOrderDetail } from "@/app/actions/fetchOrderDetails";
-import { updateOrderStatus } from "@/app/actions/updateOrder/updateOrderStatus";
-import { updateOrderPaid } from "@/app/actions/updateOrder/updateOrderPaid";
 import { fetchedOrder, OrderItemType } from "@/app/typesAndInterfaces/orderTypes";
 import Loading from "./loading";
 import Link from "next/link";
 import { toast, Toaster } from "sonner";
+import { handleStatusChange, commitStatusChange, commitPaidChange, handlePaidChange } from "@/app/admin/orders/helperFunctions/orderStatusHelpers";
+import StatusUpdateModal from "@/app/admin/orders/modals/statusUpdateModal";
+import PaidUpdateModal from "@/app/admin/orders/modals/paidModal";
+import { orderStatuses } from "@/app/data/orderContent";
 
 interface OrderDetailViewProps {
     orderId: string;
@@ -23,12 +25,18 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [pendingStatusChange, setPendingStatusChange] = useState<string | null>(null);
+    const [showPaidModal, setShowPaidModal] = useState(false);
+    const [pendingPaidChange, setPendingPaidChange] = useState<boolean | null>(null);
+    const [paidChecked, setPaidChecked] = useState<boolean | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const { order, orderItems } = await fetchOrderDetail(orderId, email);
                 setOrderData({ order, orderItems });
+                setPaidChecked(order?.paid);
                 setIsLoading(false);
             } catch (err) {
                 setError("Failed to load order details.");
@@ -38,53 +46,60 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
         fetchData();
     }, [orderId, email]);
 
-    const handleStatusChange = async (newStatus: string) => {
-        const oldStatus = orderData.order?.status;
-        if (!orderData.order) return;
+    const total = useMemo(() => {
+        let total = 0;
+        orderData.orderItems?.forEach((item) => {
+            total += item.variant.price * item.quantity;
+        });
+        return total;
+    }, [orderData.orderItems]);
 
-        setOrderData((prev) => ({
-            ...prev,
-            order: { ...prev.order!, status: newStatus },
-        }));
 
-        try {
-            if (oldStatus !== newStatus) {
-                const updated = await updateOrderStatus(orderId, newStatus);
-                if (updated.success) {
-                    setOrderData((prev) => ({
-                        ...prev,
-                        order: { ...prev.order!, status: newStatus },
-                    }));
-                    toast.success(`Order status updated to ${newStatus}`);
-                }
-            }
-
-        } catch (err) {
-            alert("Error updating status");
-        }
+    const onStatusChange = (newStatus: string) => {
+        if (!isAdmin) return;
+        handleStatusChange({
+            newStatus,
+            currentStatus: orderData.order?.status || "",
+            onImportantStatusChange: (status) => {
+                setPendingStatusChange(status);
+                setShowStatusModal(true);
+            },
+            onSimpleStatusChange: (status) => {
+                commitStatusChange({
+                    orderId,
+                    newStatus: status,
+                    oldStatus: orderData.order?.status || "",
+                    orderData,
+                    setOrderData,
+                });
+            },
+        });
     };
 
-    const handlePaidChange = async (paid: boolean) => {
-        if (!orderData.order) return;
-
-        setOrderData((prev) => ({
-            ...prev,
-            order: { ...prev.order!, paid },
-        }));
-
-        try {
-            const updated = await updateOrderPaid(orderId, paid);
-            if (updated.success) {
-                setOrderData((prev) => ({
-                    ...prev,
-                    order: { ...prev.order!, paid },
-                }));
-                toast.success(`Order paid status updated to ${paid}`);
-            }
-
-        } catch (err) {
-            toast.error("Error updating paid status");
-        }
+    const onPaidChange = (paid: boolean) => {
+        if (!isAdmin) return;
+        handlePaidChange({
+            newPaid: paid,
+            oldPaid: !paid,
+            onImportantPaidChange: (paidValue) => {
+                setPendingPaidChange(paidValue);
+                setShowPaidModal(true); // trigger modal with optional note/email
+            },
+            onSimplePaidChange: async (paidValue) => {
+                await commitPaidChange({
+                    status: orderData.order?.status || "",
+                    orderId,
+                    newPaid: paidValue,
+                    oldPaid: paidChecked ?? false,
+                    note: "",
+                    emailCustomer: false,
+                    orderData,
+                    amount: total,
+                    paymentMethod: null
+                });
+                setPaidChecked(paidValue);
+            },
+        });
     };
 
     if (isLoading) return <Loading message="Loading Order" />;
@@ -92,10 +107,12 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
     if (!orderData.order || !orderData.orderItems)
         return <div className="p-6">No order data available.</div>;
 
-    const total = orderData.orderItems.reduce(
-        (sum, item) => sum + item.quantity * item.variant.price,
-        0
-    );
+
+    const handlePaidCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPaidChecked = !paidChecked; // Calculate the new state
+        setPaidChecked(newPaidChecked); // Update the state
+        onPaidChange(newPaidChecked); // Pass the updated state explicitly
+    };
 
     return (
         <div className="max-w-5xl mx-auto p-4 md:p-6 bg-[#fff8e1] text-slate-700 rounded-lg shadow-md">
@@ -104,20 +121,23 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
                 Order #{orderData.order.id}
             </h1>
 
-            <div className="text-gray-800 space-y-1 mb-6">
+            <div className="text-gray-800 space-y-2 mb-6">
                 {/* Status */}
                 <p>
                     <span className="font-semibold">Status:</span>{" "}
                     {isAdmin ? (
                         <select
                             value={orderData.order.status as string}
-                            onChange={(e) => handleStatusChange(e.target.value)}
+                            onChange={(e) => onStatusChange(e.target.value)}
                             className="ml-2 p-1 border rounded"
                         >
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="ready for pickup">Ready for Pickup</option>
-                            <option value="shipped">Shipped</option>
+                            {
+                                Object.entries(orderStatuses).map(([key, value]) => (
+                                    <option key={key} value={key}>
+                                        {value}
+                                    </option>
+                                ))
+                            }
                         </select>
                     ) : (
                         orderData.order.status
@@ -130,15 +150,11 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
                     {isAdmin ? (
                         <input
                             type="checkbox"
-                            checked={orderData.order.paid ?? false}
-                            onChange={(e) => handlePaidChange(e.target.checked)}
+                            checked={paidChecked ?? false}
+                            onChange={handlePaidCheckboxChange}
                             className="ml-2"
                         />
-                    ) : orderData.order.paid ? (
-                        "Yes"
-                    ) : (
-                        "No"
-                    )}
+                    ) : orderData.order.paid ? ("Yes") : ("No")}
                 </p>
 
                 <p>
@@ -211,7 +227,6 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
                     </div>
                 ))}
             </div>
-
             <div className="mt-8 pt-4 border-t border-gray-200 space-y-2 max-w-[600px]">
                 <p>
                     <span className="font-bold">Delivery Method:</span>{" "}
@@ -229,10 +244,54 @@ const OrderDetailView = ({ orderId, email, isAdmin = false }: OrderDetailViewPro
                     <span className="font-bold">Order Total:</span> ${total.toFixed(2)}
                 </p>
             </div>
-
             <footer className="text-center pt-8 text-xs text-gray-500">
                 &copy; 2025 Crunchee Munchies. All rights reserved.
             </footer>
+            <StatusUpdateModal
+                visible={showStatusModal}
+                onClose={() => setShowStatusModal(false)}
+                onConfirm={(note, emailCustomer) => {
+                    if (pendingStatusChange) {
+                        commitStatusChange({
+                            orderId,
+                            newStatus: pendingStatusChange,
+                            oldStatus: orderData.order?.status as string,
+                            orderData,
+                            setOrderData,
+                            note,
+                            emailCustomer,
+                        });
+                        setPendingStatusChange(null);
+                    }
+                }}
+                newStatus={pendingStatusChange || ""}
+                customerName={orderData.order.customer_name}
+                orderNumber={orderData.order.id}
+            />
+            <PaidUpdateModal
+                visible={showPaidModal}
+                onClose={() => setShowPaidModal(false)}
+                onConfirm={(note, emailCustomer, paymentMethod) => {
+                    if (pendingPaidChange) {
+                        commitPaidChange({
+                            status: orderData.order?.status as string,
+                            orderId,
+                            newPaid: paidChecked ?? false,
+                            oldPaid: !(paidChecked ?? false),
+                            note,
+                            emailCustomer,
+                            orderData,
+                            amount: total,
+                            paymentMethod
+                        });
+                        setPendingPaidChange(null);
+                    }
+                }}
+                paid={paidChecked || false}
+                customerName={orderData.order.customer_name}
+                orderNumber={orderData.order.id}
+                setPaidChecked={setPaidChecked}
+            />
         </div>
     );
 };
