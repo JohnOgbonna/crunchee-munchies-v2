@@ -80,9 +80,9 @@ export function handleStatusChange({
     (currentStatus === "approved" &&
       (newStatus === "ready for pickup" ||
         newStatus === "shipped" ||
-        newStatus === "canceled")) ||
+        ["cancelled", "canceled"].includes(newStatus) || newStatus === "canceled")) ||
     newStatus === "shipped" ||
-    newStatus === "canceled" || newStatus === "completed";
+    ["cancelled", "canceled"].includes(newStatus) || newStatus === "completed";
 
   if (importantChange) {
     onImportantStatusChange(newStatus);

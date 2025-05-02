@@ -38,7 +38,8 @@ export type item = {
     mostPopular?: boolean;
     heroImage: string;
     listOrder?: number;
-    type: itemTypes
+    type: itemTypes,
+    allowDelete?: boolean
 };
 
 export type itemSizeVariation = {

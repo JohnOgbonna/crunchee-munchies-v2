@@ -1,4 +1,3 @@
-// app/admin/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -9,6 +8,7 @@ import { motion } from 'framer-motion';
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
@@ -16,7 +16,11 @@ export default function AdminLogin() {
     e.preventDefault();
     try {
       const token = await signIn(email, password);
-      localStorage.setItem('cognitoToken', token);
+      if (rememberMe) {
+        localStorage.setItem('cognitoToken', token); // persists across sessions
+      } else {
+        sessionStorage.setItem('cognitoToken', token); // clears when browser is closed
+      }
       router.push('/admin/dashboard');
     } catch (error: any) {
       setErrorMsg(error.message || 'Failed to sign in.');
@@ -49,6 +53,15 @@ export default function AdminLogin() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <label className="flex items-center space-x-2 text-sm">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="accent-primary"
+            />
+            <span>Remember Me</span>
+          </label>
           {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
           <button
             type="submit"
