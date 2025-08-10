@@ -6,7 +6,7 @@ import { OrderType } from '@/app/typesAndInterfaces/orderTypes';
 import OrderTable from './ordersTable';
 import OrderSearchBar from './orderSearchBar';
 import { validateCognitoToken } from '@/app/lib/auth/validateCognitoToken';
-import router from 'next/router';
+import { useRouter } from 'next/navigation'; // <-- FIXED
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<OrderType[]>([]);
@@ -17,9 +17,10 @@ export default function AdminOrdersPage() {
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [validationFailed, setValidationFailed] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
-        const token = localStorage.getItem('cognitoToken');
+        const token = localStorage.getItem('cognitoToken') || sessionStorage.getItem('cognitoToken');
         if (!token) {
             router.push('/admin'); // redirect to login
         }

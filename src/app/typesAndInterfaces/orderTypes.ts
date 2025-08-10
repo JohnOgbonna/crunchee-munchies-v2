@@ -154,7 +154,7 @@ export interface OrderItemType {
     variant: itemSizeVariation, // Variant ID for the product in the order
     quantity: number;  // Quantity of the item ordered
     notes: string | null;  // Notes for the order item (if any)
-    parent : item,
+    parent: item,
 }
 
 // Represents the entire order along with the items
@@ -197,4 +197,16 @@ export interface fetchedOrder {
     city: string | null;       // City for delivery
     status: string | null;     // Order status (e.g., 'pending', 'completed')
     order_items: OrderItemType[]; // Associated order items
+}
+
+export interface ItemVariantUpdate {
+    name: string;
+    description: string;
+    price: number;
+    bundleSize?: number;
+    savings?: number;
+    minimum_quantity?: number;
+    maximum_quantity?: number;
+    list_order?: number;
+    pickup_only?: boolean;
 }

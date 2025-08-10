@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import { fetchItemsFromDB } from '@/app/lib/fetchItems';
 import { item } from '@/app/typesAndInterfaces/orderTypes';
 import AdminItemCard from '@/app/components/supporting_components/items/adminItemCard';
+import { useValidateAdmin } from '@/app/lib/hooks/useValidateAdmin';
 
 export default function AdminItemsPage() {
     const [items, setItems] = useState<Record<string, item>>({});
-    const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
+    const { validationFailed } = useValidateAdmin();
+    
 
     useEffect(() => {
         const loadItems = async () => {
@@ -19,7 +21,6 @@ export default function AdminItemsPage() {
                 console.error('Failed to load items:', err);
             }
         };
-
         loadItems();
     }, []);
 

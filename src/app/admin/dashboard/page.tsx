@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('cognitoToken');
+    const token = localStorage.getItem('cognitoToken') || sessionStorage.getItem('cognitoToken');
     if (!token) {
       router.push('/admin'); // redirect to login
     }
@@ -56,7 +56,7 @@ export default function AdminDashboard() {
             transition={{ delay: index * 0.1, duration: 0.4 }}
             className="w-full min-w-[250px] max-w-[400px] md:max-w-[500px]"
           >
-            <Link href={ key === 'signOut' ? '/admin' : `/admin/${key}`}>
+            <Link href={key === 'signOut' ? '/admin' : `/admin/${key}`}>
               <div className="bg-white hover:bg-orange-100 transition-all border border-orange-300 p-6 rounded-2xl shadow-md hover:shadow-lg flex items-center justify-between"
                 key={key}
                 onClick={() => {

@@ -1,3 +1,4 @@
+//components/supporting_components/items/adminItemCard.tsx
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { item } from '@/app/typesAndInterfaces/orderTypes';
@@ -5,6 +6,7 @@ import AdminItemVariants from './adminItemVariants';
 import { useState } from 'react';
 import { updateItemInDb, deleteItemFromDb } from '@/app/lib/db/updateItemInDB';  // Assuming deleteItemFromDb exists
 import { toast, Toaster } from 'sonner';
+import AdminItemImageEditor from './adminImageEditor';
 
 type AdminItemCardProps = {
     item: item;
@@ -82,19 +84,21 @@ const AdminItemCard = ({ item }: AdminItemCardProps) => {
             <Toaster richColors={true} position='top-center' />
             <div className="flex flex-col md:flex-row md:items-stretch gap-4">
                 <div className={`w-full md:w-40 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden py-2 md:py-4 px-2 ${isExpanded ? 'md:w-auto' : ''}`}>
-                    {item.heroImage ? (
-                        <Image
-                            src={item.heroImage}
-                            alt={item.name}
-                            width={320}
-                            height={300}
-                            className="object-contain sm:max-h-[200px] md:max-h-[150px] w-auto h-auto max-w-full"
-                        />
-                    ) : (
-                        <div className="w-full h-40 flex items-center justify-center text-sm text-slate-400">
-                            No Image
-                        </div>
-                    )}
+                    <AdminItemImageEditor
+                        currentImageUrl={item.heroImage}
+                        itemId={item.id}
+                        isEditing={isEditing}
+                        onImageUploadSuccess={async (newUrl) => {
+                            try {
+                                await updateItemInDb(item.id, { heroImage: newUrl });
+                                toast.success('Image updated!');
+                                item.heroImage = newUrl;
+                            } catch (err: any) {
+                                toast.error(`Failed to update image in DB: ${err.message}`);
+                            }
+                        }}
+                    />
+
                 </div>
 
                 <div className="flex-1">
